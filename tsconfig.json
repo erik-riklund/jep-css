@@ -1,0 +1,39 @@
+{
+  "compilerOptions":
+  {
+    "baseUrl": "./",
+    "allowJs": true,
+
+    "paths": {
+      "module:*": [
+        "./modules/*/index.ts",
+        "./modules/*"
+      ],
+      "types": [ "./types.d.ts" ],
+      "types/*": [ "./types/*" ]
+    },
+
+    "lib": [ "ESNext", "DOM" ],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleDetection": "force",
+    "resolveJsonModule": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+
+    "strict": true,
+    "skipLibCheck": false,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": false,
+    "noPropertyAccessFromIndexSignature": false
+  },
+
+  "exclude": [ "node_modules" ]
+}
