@@ -1,3 +1,5 @@
+import { parse } from 'module:parser'
+import { render } from 'module:renderer';
 import type { Preprocessor } from 'types'
 
 /**
@@ -10,12 +12,12 @@ export const preprocessor: Preprocessor =
   // ~
   parse: (input) =>
   {
-    return {};
+    return parse(input);
   },
 
   // ~
   render: (tree) =>
   {
-    return '';
+    return render(tree);
   }
 }
