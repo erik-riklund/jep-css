@@ -1,8 +1,8 @@
-import { parse } from 'module:parser'
-import { translate } from 'module:translator'
-import { interpolate } from 'module:interpolator'
-
 import type { Preprocessor } from 'types'
+
+import { parse } from 'module:parser'
+import { interpolate } from 'module:interpolator'
+import { render } from 'module:renderer'
 
 /**
  * The API for the "Just Enough Preprocessing" module.
@@ -14,6 +14,6 @@ export const preprocess: Preprocessor =
   // ~
   toString (input, context = {})
   {
-    return translate(parse(interpolate(input, context)));
+    return render(parse(interpolate(input, context)));
   }
 }

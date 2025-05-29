@@ -13,7 +13,7 @@ export const interpolate: Interpolator = (input, context) =>
 
   for (const [key, value] of Object.entries(context))
   {
-    output = output.replaceAll(`{$${key}}`, value);
+    output = output.replaceAll(`$${key}`, value);
   }
 
   return output;

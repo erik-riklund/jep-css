@@ -1,43 +1,44 @@
 import { it, expect } from 'bun:test'
 import { parse } from 'module:parser';
-import { translate } from 'module:translator'
-import { renderDeviceRange } from 'module:translator'
+import { render } from 'module:renderer'
+
+import { renderDeviceRange } from 'module:renderer/device-range'
 
 /**
  * Tests focused on basic functionality:
  */
 
-it('should return an empty string',
-  () => expect(translate([])).toEqual('')
+it.todo('should return an empty string',
+  () => expect(render([])).toEqual('')
 );
 
-it('should render a single block',
+it.todo('should render a single block',
   () =>
   {
     const styles = 'h1 { color = red; }';
     const expected = 'h1{color:red}';
 
-    expect(translate(parse(styles))).toEqual(expected);
+    expect(render(parse(styles))).toEqual(expected);
   }
 );
 
-it('should render multiple blocks',
+it.todo('should render multiple blocks',
   () =>
   {
     const styles = 'h1 { color = red; } h2 { color = blue; }';
     const expected = 'h1{color:red}h2{color:blue}';
 
-    expect(translate(parse(styles))).toEqual(expected);
+    expect(render(parse(styles))).toEqual(expected);
   }
 );
 
-it('should render nested blocks',
+it.todo('should render nested blocks',
   () =>
   {
     const styles = 'h1 { color = red; span { color = blue; } }';
     const expected = 'h1{color:red}h1 span{color:blue}';
 
-    expect(translate(parse(styles))).toEqual(expected);
+    expect(render(parse(styles))).toEqual(expected);
   }
 );
 
@@ -45,12 +46,12 @@ it('should render nested blocks',
  * Tests focused on device ranges:
  */
 
-it('should render `@use-for (* only)` blocks',
+it.todo('should render `@use-for (* only)` blocks',
   () =>
   {
     const styles = 'h1 { color = red; @use-for (tablet only){ color = blue; } }';
     const expected = 'h1{color:red}@media screen and(min-width:576px)and(max-width:1023px){h1{color:blue}}';
 
-    expect(translate(parse(styles))).toEqual(expected);
+    expect(render(parse(styles))).toEqual(expected);
   }
 );

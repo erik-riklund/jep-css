@@ -5,33 +5,33 @@
  * @param line The line number of the error.
  * @param column The column number of the error.
  */
-class PreprocessorError extends Error
+class LanguageError extends Error
 {
   constructor(message: string, line?: number, column?: number)
   {
     super(
-      `"Just Enough Preprocessing" error:\n${ message }` +
+      `<Just Enough Styling> Error:\n${ message }` +
       `${ line !== undefined && column !== undefined ?
         ` @ line ${ line }, column ${ column }.` : '.' }`
     );
 
-    this.name = 'PreprocessorError';
+    this.name = 'LanguageError';
   }
 }
 
 /**
- * An error thrown when a semicolon is missing before the end of a block.
+ * An error thrown when a missing line break is encountered after a property value assignment.
  * 
  * @param line The line number of the error.
  * @param column The column number of the error.
  */
-export class MissingSemicolonError extends PreprocessorError
+export class MissingLineBreakAfterPropertyValueError extends LanguageError
 {
   constructor(line: number, column: number)
   {
-    super('Missing semicolon before end of block', line, column);
+    super('Missing line break after property value (inside block)', line, column);
 
-    this.name = 'MissingSemicolonError';
+    this.name = 'MissingLineBreakAfterPropertyValueError';
   }
 }
 
@@ -41,7 +41,7 @@ export class MissingSemicolonError extends PreprocessorError
  * @param line The line number of the error.
  * @param column The column number of the error.
  */
-export class NestedDeviceRangeError extends PreprocessorError
+export class NestedDeviceRangeError extends LanguageError
 {
   constructor(line: number, column: number)
   {
@@ -57,7 +57,7 @@ export class NestedDeviceRangeError extends PreprocessorError
  * @param line The line number of the error.
  * @param column The column number of the error.
  */
-export class PropertyDeclarationOutsideBlockError extends PreprocessorError
+export class PropertyDeclarationOutsideBlockError extends LanguageError
 {
   constructor(line: number, column: number)
   {
@@ -73,7 +73,7 @@ export class PropertyDeclarationOutsideBlockError extends PreprocessorError
  * @param line The line number of the error.
  * @param column The column number of the error.
  */
-export class UnexpectedCommaOutsideBlockError extends PreprocessorError
+export class UnexpectedCommaOutsideBlockError extends LanguageError
 {
   constructor(line: number, column: number)
   {
@@ -86,7 +86,7 @@ export class UnexpectedCommaOutsideBlockError extends PreprocessorError
 /**
  * An error thrown when the end of a string is encountered without a closing brace.
  */
-export class UnexpectedEndOfStringError extends PreprocessorError
+export class UnexpectedEndOfStringError extends LanguageError
 {
   constructor()
   {
@@ -102,7 +102,7 @@ export class UnexpectedEndOfStringError extends PreprocessorError
  * @param line The line number of the error.
  * @param column The column number of the error.
  */
-export class UnexpectedOpeningBraceError extends PreprocessorError
+export class UnexpectedOpeningBraceError extends LanguageError
 {
   constructor(line: number, column: number)
   {
@@ -113,28 +113,12 @@ export class UnexpectedOpeningBraceError extends PreprocessorError
 }
 
 /**
- * An error thrown when an unexpected semicolon is encountered.
- * 
- * @param line The line number of the error.
- * @param column The column number of the error.
- */
-export class UnexpectedSemicolonError extends PreprocessorError
-{
-  constructor(line: number, column: number)
-  {
-    super('Unexpected semicolon', line, column);
-
-    this.name = 'UnexpectedSemicolonError';
-  }
-}
-
-/**
  * An error thrown when an unmatched closing brace is encountered.
  * 
  * @param line The line number of the error.
  * @param column The column number of the error.
  */
-export class UnmatchedClosingBraceError extends PreprocessorError
+export class UnmatchedClosingBraceError extends LanguageError
 {
   constructor(line: number, column: number)
   {
@@ -149,7 +133,7 @@ export class UnmatchedClosingBraceError extends PreprocessorError
  * 
  * @param deviceRange The specified device range.
  */
-export class UnknownDeviceRangeError extends PreprocessorError
+export class UnknownDeviceRangeError extends LanguageError
 {
   constructor(deviceRange: string)
   {

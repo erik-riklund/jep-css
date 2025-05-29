@@ -3,13 +3,12 @@ import type { Property } from 'types'
 import type { Parser } from 'types'
 import type { ParserState } from 'types'
 
-import { MissingSemicolonError } from 'errors'
+import { MissingLineBreakAfterPropertyValueError } from 'errors'
 import { NestedDeviceRangeError } from 'errors'
 import { PropertyDeclarationOutsideBlockError } from 'errors'
 import { UnexpectedCommaOutsideBlockError } from 'errors'
 import { UnexpectedEndOfStringError } from 'errors'
 import { UnexpectedOpeningBraceError } from 'errors'
-import { UnexpectedSemicolonError } from 'errors'
 import { UnmatchedClosingBraceError } from 'errors'
 
 /**
@@ -42,12 +41,6 @@ export const parse: Parser = (input) =>
   {
     const character = input[state.position];
 
-    /**
-     * Handles the current character based on its value.
-     * 
-     * Each special character has a corresponding handler function.
-     */
-
     switch (character)
     {
       case '{':
@@ -70,12 +63,12 @@ export const parse: Parser = (input) =>
         handleAssignment(state);
         break;
 
-      case ';':
-        handleSemicolon(state);
-        break;
-
       case ',':
         handleComma(state);
+        break;
+
+      case '\n':
+        handleLineBreak(state);
         break;
 
       default:
@@ -83,10 +76,6 @@ export const parse: Parser = (input) =>
         break;
     }
 
-    /**
-     * Updates the line number and column number based on the current character.
-     * If the current character is a newline, it moves to the next line.
-     */
     if (character === '\n')
     {
       state.line++;
@@ -129,7 +118,7 @@ const handleOpeningBrace = (state: ParserState) =>
     selectors: selector.split(',').map(selector => selector.trim())
   };
 
-  if (/^\s*@use-for\s*\(/.test(state.buffer))
+  if (selector.startsWith('@use for '))
   {
     if (state.isDeviceRange)
     {
@@ -138,6 +127,10 @@ const handleOpeningBrace = (state: ParserState) =>
 
     block.type = 'device-range';
     state.isDeviceRange = true;
+  }
+  else if (selector.startsWith('@theme '))
+  {
+    // ... handle merging with other media queries.
   }
 
   if (state.stack.length > 0)
@@ -172,7 +165,7 @@ const handleClosingBrace = (state: ParserState) =>
   }
   else if (state.isDeclaration)
   {
-    throw new MissingSemicolonError(state.line, state.column);
+    throw new MissingLineBreakAfterPropertyValueError(state.line, state.column);
   }
 
   state.stack.pop();
@@ -237,28 +230,23 @@ const handleAssignment = (state: ParserState) =>
 }
 
 /**
- * Handles the semicolon `;` in the input string.
- * 
- * - If the semicolon is encountered outside of a declaration,
- *   it will throw an `UnexpectedSemicolonError`.
+ * ?
  */
-const handleSemicolon = (state: ParserState) =>
+const handleLineBreak = (state: ParserState) =>
 {
-  if (!state.property || !state.isDeclaration)
+  if (state.property && state.isDeclaration)
   {
-    throw new UnexpectedSemicolonError(state.line, state.column);
+    const currentBlock = state.stack[state.stack.length - 1];
+    const property: Property = { key: state.property, value: state.buffer.trim() };
+
+    currentBlock.declarations = currentBlock.declarations ?
+      [...currentBlock.declarations, property] : [property];
+
+    state.property = '';
+    state.isDeclaration = false;
+
+    state.buffer = ''; // reset the buffer.
   }
-
-  const currentBlock = state.stack[state.stack.length - 1];
-  const property: Property = { key: state.property, value: state.buffer.trim() };
-
-  currentBlock.declarations = currentBlock.declarations ?
-    [...currentBlock.declarations, property] : [property];
-
-  state.property = '';
-  state.isDeclaration = false;
-
-  state.buffer = ''; // reset the buffer.
 }
 
 /**

@@ -1,13 +1,12 @@
 import { it, expect } from 'bun:test'
 import { parse } from 'module:parser'
 
-import { MissingSemicolonError } from 'errors'
+import { MissingLineBreakAfterPropertyValueError } from 'errors'
 import { NestedDeviceRangeError } from 'errors'
 import { PropertyDeclarationOutsideBlockError } from 'errors'
 import { UnexpectedCommaOutsideBlockError } from 'errors'
 import { UnexpectedEndOfStringError } from 'errors'
 import { UnexpectedOpeningBraceError } from 'errors'
-import { UnexpectedSemicolonError } from 'errors'
 import { UnmatchedClosingBraceError } from 'errors'
 
 /**
@@ -90,7 +89,7 @@ it('should parse deeply nested blocks',
 it('should parse a property',
   () =>
   {
-    const styles = 'h1 { color = red; }';
+    const styles = 'h1 {\n  color = red\n }';
 
     expect(parse(styles)).toEqual([
       { selectors: ['h1'], declarations: [{ key: 'color', value: 'red' }] }
@@ -101,7 +100,7 @@ it('should parse a property',
 it('should parse multiple properties',
   () =>
   {
-    const styles = 'h1 { color = red; background-color = blue; }';
+    const styles = 'h1 { color = red\n background-color = blue\n }';
 
     expect(parse(styles)).toEqual([
       {
@@ -121,7 +120,7 @@ it('should parse multiple properties',
 it('should parse device range blocks',
   () =>
   {
-    const styles = 'h1 { color = red; @use-for (small only){ color = blue; } }';
+    const styles = 'h1 { color = red\n @use for mobile only{ color = blue\n } }';
 
     expect(parse(styles)).toEqual([
       {
@@ -130,7 +129,7 @@ it('should parse device range blocks',
         children: [
           {
             type: 'device-range',
-            selectors: ['@use-for (small only)'],
+            selectors: ['@use for mobile only'],
             declarations: [{ key: 'color', value: 'blue' }]
           }
         ]
@@ -146,7 +145,7 @@ it('should parse device range blocks',
 it('should parse multiple selectors',
   () =>
   {
-    const styles = 'h1, h2 { color = red; }';
+    const styles = 'h1, h2 { color = red\n }';
 
     expect(parse(styles)).toEqual([
       {
@@ -160,7 +159,7 @@ it('should parse multiple selectors',
 it('should parse attribute selectors',
   () =>
   {
-    const styles = 'input[type="radio"] { color = red; }';
+    const styles = 'input[type="radio"] { color = red\n }';
 
     expect(parse(styles)).toEqual([
       {
@@ -174,7 +173,7 @@ it('should parse attribute selectors',
 it('should parse pseudo-class selectors',
   () =>
   {
-    const styles = 'h1:hover { color = red; }';
+    const styles = 'h1:hover { color = red\n }';
 
     expect(parse(styles)).toEqual([
       {
@@ -188,7 +187,7 @@ it('should parse pseudo-class selectors',
 it('should parse pseudo-element selectors',
   () =>
   {
-    const styles = 'h1::before { color = red; }';
+    const styles = 'h1::before { color = red\n }';
 
     expect(parse(styles)).toEqual([
       {
@@ -230,24 +229,6 @@ it('should throw an error on unmatched closing brace',
   }
 );
 
-it('should throw an error on missing semicolons',
-  () =>
-  {
-    const styles = 'h1 { color = red }';
-
-    expect(() => parse(styles)).toThrow(MissingSemicolonError);
-  }
-);
-
-it('should throw an error on unexpected semicolons',
-  () =>
-  {
-    const styles = 'h1 ;{ color = red; }';
-
-    expect(() => parse(styles)).toThrow(UnexpectedSemicolonError);
-  }
-);
-
 it('should throw an error on property declarations outside of blocks',
   () =>
   {
@@ -260,8 +241,8 @@ it('should throw an error on property declarations outside of blocks',
 it('should throw an error on nested device range blocks',
   () =>
   {
-    const styles = 'h1{\ncolor=red;\n@use-for (small){\n' +
-      'color=blue;\n@use-for(medium){\ncolor=green;\n}\n}\n}';
+    const styles = 'h1{\ncolor=red\n@use for mobile only{\n' +
+      'color=blue\n@use for tablet..{\ncolor=green\n}\n}\n}';
 
     expect(() => parse(styles)).toThrow(NestedDeviceRangeError);
   }
@@ -270,7 +251,7 @@ it('should throw an error on nested device range blocks',
 it('should throw an error on unexpected commas outside of selectors',
   () =>
   {
-    const styles = 'h1, h2 { color = red; , .child {} }';
+    const styles = 'h1, h2 { color = red\n , .child {} }';
 
     expect(() => parse(styles)).toThrow(UnexpectedCommaOutsideBlockError);
   }

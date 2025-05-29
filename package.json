@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "jep-css",
+  "name": "just-enough-styling",
   "module": "index.ts",
   "devDependencies": {
     "@types/bun": "^1.2.14"
