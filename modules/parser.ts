@@ -1,10 +1,14 @@
-import type { Block, Property, Tree } from 'types'
-import type { ParserState } from 'types';
+import type { Block } from 'types'
+import type { Property } from 'types'
+import type { Parser } from 'types'
+import type { ParserState } from 'types'
 
 import { MissingSemicolonError } from 'errors'
 import { NestedDeviceRangeError } from 'errors'
 import { PropertyDeclarationOutsideBlockError } from 'errors'
+import { UnexpectedCommaOutsideBlockError } from 'errors'
 import { UnexpectedEndOfStringError } from 'errors'
+import { UnexpectedOpeningBraceError } from 'errors'
 import { UnexpectedSemicolonError } from 'errors'
 import { UnmatchedClosingBraceError } from 'errors'
 
@@ -14,7 +18,7 @@ import { UnmatchedClosingBraceError } from 'errors'
  * @param input The input string that should be parsed.
  * @returns The parsed tree.
  */
-export const parse = (input: string): Tree =>
+export const parse: Parser = (input) =>
 {
   const state: ParserState =
   {
@@ -24,8 +28,10 @@ export const parse = (input: string): Tree =>
     column: 1,
 
     property: '',
-    deviceRange: false,
-    declaration: false,
+
+    isDeviceRange: false,
+    isDeclaration: false,
+    isSelector: false,
 
     stack: [], tree: []
   };
@@ -36,25 +42,45 @@ export const parse = (input: string): Tree =>
   {
     const character = input[state.position];
 
-    if (character === '{')
+    /**
+     * Handles the current character based on its value.
+     * 
+     * Each special character has a corresponding handler function.
+     */
+
+    switch (character)
     {
-      handleOpeningBrace(state);
-    }
-    else if (character === '}')
-    {
-      handleClosingBrace(state);
-    }
-    else if (character === '=')
-    {
-      handleAssignment(state);
-    }
-    else if (character === ';')
-    {
-      handleSemicolon(state);
-    }
-    else
-    {
-      state.buffer += character; // add the current character to the buffer.
+      case '{':
+        handleOpeningBrace(state);
+        break;
+
+      case '}':
+        handleClosingBrace(state);
+        break;
+
+      case '[':
+        handleOpeningBracket(state);
+        break;
+
+      case ']':
+        handleClosingBracket(state);
+        break;
+
+      case '=':
+        handleAssignment(state);
+        break;
+
+      case ';':
+        handleSemicolon(state);
+        break;
+
+      case ',':
+        handleComma(state);
+        break;
+
+      default:
+        state.buffer += character; // add the current character to the buffer.
+        break;
     }
 
     /**
@@ -92,19 +118,26 @@ export const parse = (input: string): Tree =>
  */
 const handleOpeningBrace = (state: ParserState) =>
 {
+  const selector = state.buffer.trim();
+
+  if (selector.length === 0)
+  {
+    throw new UnexpectedOpeningBraceError(state.line, state.column);
+  }
+
   const block: Block = {
-    selectors: state.buffer.split(',').map(selector => selector.trim())
+    selectors: selector.split(',').map(selector => selector.trim())
   };
 
   if (/^\s*@use-for\s*\(/.test(state.buffer))
   {
-    if (state.deviceRange)
+    if (state.isDeviceRange)
     {
       throw new NestedDeviceRangeError(state.line, state.column);
     }
 
-    block.device = true;
-    state.deviceRange = true;
+    block.type = 'device-range';
+    state.isDeviceRange = true;
   }
 
   if (state.stack.length > 0)
@@ -123,21 +156,21 @@ const handleOpeningBrace = (state: ParserState) =>
 }
 
 /**
- * Handles the closing brace `}` in the input string.
+ * Handles closing braces `}` to close blocks in the input string.
  * 
- * If the stack is empty, it will throw an `UnmatchedClosingBraceError`.
- * If the stack is not empty, it will pop the top block from the stack.
+ * - If the stack is empty, it will throw an `UnmatchedClosingBraceError`.
+ * - If the stack is not empty, it will pop the top block from the stack.
  * 
  * 
  * @param state The current state of the parser.
  */
 const handleClosingBrace = (state: ParserState) =>
 {
-  if (!state.deviceRange && state.stack.length === 0)
+  if (!state.isDeviceRange && state.stack.length === 0)
   {
     throw new UnmatchedClosingBraceError(state.line, state.column);
   }
-  else if (state.declaration)
+  else if (state.isDeclaration)
   {
     throw new MissingSemicolonError(state.line, state.column);
   }
@@ -145,13 +178,51 @@ const handleClosingBrace = (state: ParserState) =>
   state.stack.pop();
 
   const currentBlock = state.stack[state.stack.length - 1];
-  state.deviceRange = currentBlock ? currentBlock.device ?? false : false;
+  state.isDeviceRange = currentBlock ? currentBlock.type === 'device-range' : false;
 
   state.buffer = ''; // reset the buffer.
 }
 
+/**
+ * ?
+ */
+const handleOpeningBracket = (state: ParserState) =>
+{
+  if (!state.isDeclaration)
+  {
+    state.isSelector = true;
+  }
+
+  state.buffer += '['; // add the opening bracket to the buffer.
+}
+
+/**
+ * ?
+ */
+const handleClosingBracket = (state: ParserState) =>
+{
+  if (!state.isDeclaration)
+  {
+    state.isSelector = false;
+  }
+
+  state.buffer += ']'; // add the closing bracket to the buffer.
+}
+
+/**
+ * Handles the assignment operator `=` for property value assignments.
+ * 
+ * - If the stack is empty, it will throw a `PropertyDeclarationOutsideBlockError`.
+ */
 const handleAssignment = (state: ParserState) =>
 {
+  if (state.isSelector)
+  {
+    state.buffer += '=';
+
+    return; // ignore the assignment operator in attribute selectors, e.g. `input[type="radio"]`.
+  }
+
   const currentBlock = state.stack[state.stack.length - 1];
 
   if (!currentBlock)
@@ -159,18 +230,21 @@ const handleAssignment = (state: ParserState) =>
     throw new PropertyDeclarationOutsideBlockError(state.line, state.column);
   }
 
-  state.declaration = true;
+  state.isDeclaration = true;
   state.property = state.buffer.trim();
 
   state.buffer = ''; // reset the buffer.
 }
 
 /**
+ * Handles the semicolon `;` in the input string.
  * 
+ * - If the semicolon is encountered outside of a declaration,
+ *   it will throw an `UnexpectedSemicolonError`.
  */
 const handleSemicolon = (state: ParserState) =>
 {
-  if (!state.property || !state.declaration)
+  if (!state.property || !state.isDeclaration)
   {
     throw new UnexpectedSemicolonError(state.line, state.column);
   }
@@ -182,6 +256,23 @@ const handleSemicolon = (state: ParserState) =>
     [...currentBlock.declarations, property] : [property];
 
   state.property = '';
-  state.declaration = false;
+  state.isDeclaration = false;
+
   state.buffer = ''; // reset the buffer.
+}
+
+/**
+ * Handles the comma `,` in the input string.
+ * 
+ * - If the comma is encountered outside of a selector or declaration,
+ *   it will throw an `UnexpectedCommaOutsideBlockError`.
+ */
+const handleComma = (state: ParserState) =>
+{
+  if (!state.isSelector && !state.isDeclaration && state.buffer.trim().length === 0)
+  {
+    throw new UnexpectedCommaOutsideBlockError(state.line, state.column);
+  }
+
+  state.buffer += ','; // add the comma to the buffer.
 }

@@ -6,9 +6,9 @@
  */
 export type Block = {
   /**
-   * Specifies whether the block is a media query block.
+   * Specifies the type of the block.
    */
-  device?: boolean;
+  type?: 'device-range' | 'theme';
 
   /**
    * An array of selectors for the block.

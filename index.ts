@@ -1,5 +1,7 @@
 import { parse } from 'module:parser'
-import { render } from 'module:renderer';
+import { translate } from 'module:translator'
+import { interpolate } from 'module:interpolator'
+
 import type { Preprocessor } from 'types'
 
 /**
@@ -7,17 +9,11 @@ import type { Preprocessor } from 'types'
  * 
  * @see https://github.com/erik-riklund/jep-css
  */
-export const preprocessor: Preprocessor =
+export const preprocess: Preprocessor =
 {
   // ~
-  parse: (input) =>
+  toString (input, context = {})
   {
-    return parse(input);
-  },
-
-  // ~
-  render: (tree) =>
-  {
-    return render(tree);
+    return translate(parse(interpolate(input, context)));
   }
 }

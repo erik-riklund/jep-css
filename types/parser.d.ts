@@ -34,12 +34,19 @@ export type ParserState = {
   /**
    * Tracks whether a device range block is currently being parsed.
    */
-  deviceRange: boolean;
+  isDeviceRange: boolean;
 
   /**
    * Tracks whether a property value is currently being parsed.
    */
-  declaration: boolean;
+  isDeclaration: boolean;
+
+  /**
+   * Tracks whether a selector is currently being parsed.
+   * 
+   * Used to not treat the assignment operator as property value assignment in selectors.
+   */
+  isSelector: boolean;
 
   /**
    * The stack of nested blocks being parsed.

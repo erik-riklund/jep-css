@@ -68,6 +68,22 @@ export class PropertyDeclarationOutsideBlockError extends PreprocessorError
 }
 
 /**
+ * An error thrown when a comma is encountered outside of a block.
+ * 
+ * @param line The line number of the error.
+ * @param column The column number of the error.
+ */
+export class UnexpectedCommaOutsideBlockError extends PreprocessorError
+{
+  constructor(line: number, column: number)
+  {
+    super('Unexpected comma outside selector', line, column);
+
+    this.name = 'UnexpectedCommaOutsideBlockError';
+  }
+}
+
+/**
  * An error thrown when the end of a string is encountered without a closing brace.
  */
 export class UnexpectedEndOfStringError extends PreprocessorError
@@ -77,6 +93,22 @@ export class UnexpectedEndOfStringError extends PreprocessorError
     super('Unexpected end of string (missing closing brace)');
 
     this.name = 'UnexpectedEndOfStringError';
+  }
+}
+
+/**
+ * An error thrown when an unexpected opening brace is encountered.
+ * 
+ * @param line The line number of the error.
+ * @param column The column number of the error.
+ */
+export class UnexpectedOpeningBraceError extends PreprocessorError
+{
+  constructor(line: number, column: number)
+  {
+    super('Unexpected opening brace', line, column);
+
+    this.name = 'UnexpectedOpeningBraceError';
   }
 }
 

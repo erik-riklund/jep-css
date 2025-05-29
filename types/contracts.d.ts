@@ -8,16 +8,35 @@ import type { Tree } from 'types'
 export interface Preprocessor
 {
   /**
-   * Parse the provided input string and return a tree
-   * structure representing the parsed stylesheet.
-   */
-  parse: (input: string) => Tree;
-
-  /**
-   * Render the provided tree structure into a string.
+   * Perform a full preprocessing pass on a string of custom CSS-like input.
    * 
-   * @param tree A tree structure representing the parsed stylesheet.
-   * @returns The rendered string (valid CSS).
+   * - Interpolate variables.
+   * - Parse the input into a tree of blocks.
+   * - Render the tree into a string of CSS-like output.
+   * 
+   * @param input The input string that should be preprocessed.
+   * @param context The context object that contains the variable values.
+   * @returns The processed string containing valid CSS output.
    */
-  render: (tree: Tree) => string;
+  toString: (input: string, context?: Context) => string;
 }
+
+/**
+ * Represents the context object that contains variable values.
+ */
+type Context = Record<string, string>;
+
+/**
+ * Represents the signature of an interpolator function.
+ */
+export type Interpolator = (input: string, context: Context) => string;
+
+/**
+ * Represents the signature of a parser function.
+ */
+export type Parser = (input: string) => Tree;
+
+/**
+ * Represents the signature of a renderer function.
+ */
+export type Renderer = (tree: Tree) => string;
