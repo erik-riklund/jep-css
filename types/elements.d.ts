@@ -8,7 +8,10 @@ export type Block = {
   /**
    * Specifies the type of the block.
    */
-  type?: 'device-range' | 'theme';
+  type?:
+  | 'device-range'
+  | 'state'
+  | 'theme';
 
   /**
    * An array of selectors for the block.

@@ -6,7 +6,9 @@ _Don't replace the engine, just give it a more elegant dashboard._
 
 Inventing a new language that translates to CSS? Yes, that's exactly what's going on here. 🚀
 
-The language reshapes CSS expression, offering a more human-friendly, declarative alternative without intending to replace it. This provides a more intuitive way to compose stylesheets, reducing the need for deep syntax knowledge.
+The language reshapes CSS expression, offering a more human-friendly, declarative alternative
+without intending to replace it. It provides a more intuitive way to compose stylesheets,
+reducing the need for deep syntax knowledge.
 
 ---
 
@@ -90,12 +92,94 @@ div
 ```scss
 div
 {
-  width = 80%
-
-
   @state collapsed
   {
+    // the selector is translated to `div.collapsed`.
+    // 
+    // `collapsed` is only an example, the class name can be anything.
+  }
 
+  @state not disabled
+  {
+    // `div:not(.disabled)`
+  }
+
+  @state expanded and active
+  {
+    // `div.expanded.active`
+  }
+
+  @state expanded and not loading
+  {
+    // `div.expanded:not(.loading)`
+  }
+}
+```
+
+---
+
+### ?
+
+?
+
+```scss
+div
+{
+  @when empty
+  {
+    // `div:empty`
+  }
+
+  @when not empty
+  {
+    // `div:not(:empty)`
+  }
+}
+```
+
+---
+
+### ?
+
+?
+
+```scss
+div
+{
+  @has span
+  {
+    // `div:has(span)`
+  }
+
+  @has not span
+  {
+    // `div:not(:has(span))`
+  }
+}
+```
+
+---
+
+### ?
+
+?
+
+```scss
+div
+{
+  @on hover
+  {
+    // `div:hover`
+  }
+
+  @on disabled
+  {
+    // `div:disabled`
+  }
+
+  @on not disabled
+  {
+    // `div:not(:disabled)`
   }
 }
 ```

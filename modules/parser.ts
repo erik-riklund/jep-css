@@ -128,7 +128,19 @@ const handleOpeningBrace = (state: ParserState) =>
     block.type = 'device-range';
     state.isDeviceRange = true;
   }
+  else if (selector.startsWith('@state '))
+  {
+    // ... handle translation of state selectors.
+
+    block.type = 'state';
+  }
   else if (selector.startsWith('@theme '))
+  {
+    // ... handle merging with other media queries.
+
+    block.type = 'theme';
+  }
+  else if (selector.startsWith('@when '))
   {
     // ... handle merging with other media queries.
   }
