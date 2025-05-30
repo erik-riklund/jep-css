@@ -1,5 +1,6 @@
 import { handleDeviceSelector } from './selectors/device'
 import { handleStateSelector } from './selectors/state'
+import { handleThemeSelector } from './selectors/theme'
 
 /**
  * Centralized collection of selector parsers.
@@ -7,5 +8,6 @@ import { handleStateSelector } from './selectors/state'
 export const selectorParsers =
 {
   handleDeviceSelector,
-  handleStateSelector
+  handleStateSelector,
+  handleThemeSelector
 }

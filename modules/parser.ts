@@ -102,6 +102,10 @@ const handleOpeningBrace = (state: ParserState) =>
   {
     selectorParsers.handleStateSelector(block);
   }
+  else if (selector.startsWith('@theme '))
+  {
+    selectorParsers.handleThemeSelector(state, block);
+  }
 
   /**
    * Adds the current block to the stack, either as a top-level block if the stack is empty,

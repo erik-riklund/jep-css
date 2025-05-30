@@ -139,6 +139,75 @@ it('should parse device range blocks targeting a specific device',
   }
 );
 
+it('should parse device range blocks targeting a device range',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @device tablet ..{ color = blue\n } }';
+
+    expect(parse(styles)).toEqual([
+      {
+        selectors: ['h1'],
+        declarations: [{ key: 'color', value: 'red' }],
+        children: [
+          {
+            type: 'device-range',
+            selectors: ['(min-width:576px)'],
+            declarations: [{ key: 'color', value: 'blue' }]
+          }
+        ]
+      }
+    ]);
+  }
+);
+
+it('should parse a theme block',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @theme light{ color = blue\n } }';
+
+    expect(parse(styles)).toEqual([
+      {
+        selectors: ['h1'],
+        declarations: [{ key: 'color', value: 'red' }],
+        children: [
+          {
+            type: 'theme',
+            selectors: ['(prefers-color-scheme:light)'],
+            declarations: [{ key: 'color', value: 'blue' }]
+          }
+        ]
+      }
+    ]);
+  }
+);
+
+it('should parse a theme block inside a device range block',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @device tablet ..{ @theme light{ color = blue\n } } }';
+
+    expect(parse(styles)).toEqual([
+      {
+        selectors: ['h1'],
+        declarations: [{ key: 'color', value: 'red' }],
+        children: [
+          {
+            type: 'device-range',
+            selectors: ['(min-width:576px)and(prefers-color-scheme:light)'],
+            children: [
+              {
+                type: 'theme',
+                selectors: ['(prefers-color-scheme:light)'],
+                declarations: [{ key: 'color', value: 'blue' }]
+              }
+            ]
+          }
+        ]
+      }
+    ]);
+  }
+);
+
 /**
  * Tests focused on parsing selectors:
  */
