@@ -12,31 +12,31 @@ reducing the need for deep syntax knowledge.
 
 ---
 
-### Nesting for enhanced readability
+### Nesting for enhanced readability ✔️
 
-_A description will be added in the future._
+Nesting isn't a new idea — it’s a familiar pattern from SCSS and similar preprocessors. In JES, it improves readability by keeping related selectors visually grouped. It's a clean, structured way to reflect hierarchy without repeating parent selectors.
 
 ```
 div
 {
-  span // non-specific selector `div span`
+  span 
   {
-    color = red
+    // `div span`
   }
+}
 
-  @child element h1 // `div > h1`
+form
+{
+  fieldset
   {
-    color = green
-
-    font-size = 200%
-    text-transform = uppercase
-  }
-
-  @sibling class some-class // `div ~ .some-class`
-  {
-    button // `div ~ .some-class button`
+    input
     {
-      border-color = black
+      // `form fieldset input`
+    }
+
+    button
+    {
+      // `form fieldset button`
     }
   }
 }
@@ -44,22 +44,9 @@ div
 
 ---
 
-### ?
+### Targeting specific devices ✔️
 
-_A description will be added in the future._
-
-```
-div
-{
-  
-}
-```
-
----
-
-### Targeting specific devices
-
-_A description will be added in the future._
+JES provides a clean, readable syntax for responsive design. The `@device` rule lets you define styles for common breakpoints without writing verbose media queries. Use ranges combined with keywords like `tablet` or `laptop` to express intent directly.
 
 ```
 @device tablet only
@@ -83,11 +70,13 @@ _A description will be added in the future._
 }
 ```
 
+> ℹ️ The available device names are `mobile`, `tablet`, `laptop`, and `desktop`.
+
 ---
 
-### Preferred color schemes
+### Preferred color schemes ✔️
 
-_A description will be added in the future._
+JES makes it easy to adapt styles to the user’s system theme. The `@theme` rule maps directly to `prefers-color-scheme`, letting you define light and dark mode styles inline, right where they’re relevant.
 
 ```
 div
@@ -103,9 +92,9 @@ div
 
 ---
 
-### State management
+### State management ✔️
 
-_A description will be added in the future._
+JES simplifies class-based state styling with the `@state` rule. It provides a clear, expressive way to define styles based on class presence, combinations, and negations without manually crafting complex selectors.
 
 ```
 div
@@ -127,16 +116,16 @@ div
     // `div.expanded.active`
   }
 
-  @state expanded and not loading
+  @state expanded and not loading and active
   {
-    // `div.expanded:not(.loading)`
+    // `div.expanded:not(.loading).active`
   }
 }
 ```
 
 ---
 
-### ?
+### ? 🧠
 
 _A description will be added in the future._
 
@@ -157,7 +146,7 @@ div
 
 ---
 
-### Relational selectors
+### Relational selectors 🧠
 
 _A description will be added in the future._
 
@@ -193,7 +182,7 @@ div
 
 ---
 
-### ?
+### ? 🧠
 
 _A description will be added in the future._
 
