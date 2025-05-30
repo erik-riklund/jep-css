@@ -125,7 +125,7 @@ div
 
 ---
 
-### `@child`, `@sibling`, and `@adjacent` 🛠️
+### `@child`, `@sibling`, and `@adjacent` ✔️
 
 The `@child`, `@sibling`, and `@adjacent` rules give you direct, readable control over element relationships. They map to standard CSS combinators, letting you express structure clearly without resorting to verbose selectors.
 
@@ -156,7 +156,7 @@ div
 
 ---
 
-### `@attribute` 🧠
+### `@attribute` 🛠️
 
 The `@attribute` rule turns dense attribute selectors into clear, plain-language expressions. Whether you're checking for existence, matching values, or applying negations, it makes attribute-based styling far more intuitive.
 
