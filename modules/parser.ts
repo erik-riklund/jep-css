@@ -145,7 +145,7 @@ const handleClosingBrace = (state: ParserState) =>
   state.stack.pop();
 
   const currentBlock = state.stack[state.stack.length - 1];
-  state.isDeviceRange = currentBlock ? currentBlock.type === 'device-range' : false;
+  state.isDeviceRange = currentBlock ? currentBlock.type === 'device' : false;
 
   state.buffer = ''; // reset the buffer.
 }

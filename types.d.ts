@@ -1,5 +1,4 @@
 export type { Block } from 'types/elements'
-export type { Device } from 'types/devices'
 export type { Interpolator } from 'types/contracts'
 export type { MaybeNull } from 'types/utilities'
 export type { Parser } from 'types/contracts'

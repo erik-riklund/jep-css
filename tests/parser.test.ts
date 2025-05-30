@@ -129,7 +129,7 @@ it('should parse device range blocks targeting a specific device',
         declarations: [{ key: 'color', value: 'red' }],
         children: [
           {
-            type: 'device-range',
+            type: 'device',
             selectors: ['(max-width:575px)'],
             declarations: [{ key: 'color', value: 'blue' }]
           }
@@ -150,7 +150,7 @@ it('should parse device range blocks targeting a device range',
         declarations: [{ key: 'color', value: 'red' }],
         children: [
           {
-            type: 'device-range',
+            type: 'device',
             selectors: ['(min-width:576px)'],
             declarations: [{ key: 'color', value: 'blue' }]
           }
@@ -192,7 +192,7 @@ it('should parse a theme block inside a device range block',
         declarations: [{ key: 'color', value: 'red' }],
         children: [
           {
-            type: 'device-range',
+            type: 'device',
             selectors: ['(min-width:576px)and(prefers-color-scheme:light)'],
             children: [
               {

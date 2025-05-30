@@ -21,7 +21,7 @@ export const handleThemeSelector = (state: ParserState, block: Block) =>
 
     for (let i = stack.length - 1; i >= 0; i--)
     {
-      if (stack[i].type === 'device-range')
+      if (stack[i].type === 'device')
       {
         stack[i].selectors = [`${ stack[i].selectors[0] }and${ block.selectors[0] }`];
 

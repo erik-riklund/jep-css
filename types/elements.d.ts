@@ -10,8 +10,9 @@ export type Block = {
    */
   type?:
   | 'adjacent'
+  | 'attribute'
   | 'child'
-  | 'device-range'
+  | 'device'
   | 'sibling'
   | 'state'
   | 'theme';

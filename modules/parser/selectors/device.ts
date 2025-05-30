@@ -27,7 +27,7 @@ export const handleDeviceSelector = (state: ParserState, block: Block) =>
     throw new NestedDeviceRangeError(state.line, state.column);
   }
 
-  block.type = 'device-range';
+  block.type = 'device';
   state.isDeviceRange = true;
 
   const parsedSelectors: string[] = [];

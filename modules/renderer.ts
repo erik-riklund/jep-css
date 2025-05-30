@@ -37,7 +37,7 @@ export const renderCurrentBlock = (group: string, state: RenderState) =>
     state.result[group] = []; // initialize the output group.
   }
 
-  if (currentBlock.type === 'device-range')
+  if (currentBlock.type === 'device')
   {
     state.result[group].push(`@media screen and${ currentBlock.selectors[0] }{`);
 
