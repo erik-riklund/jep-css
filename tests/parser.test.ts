@@ -7,6 +7,7 @@ import { PropertyDeclarationOutsideBlockError } from 'errors'
 import { UnexpectedCommaOutsideBlockError } from 'errors'
 import { UnexpectedEndOfStringError } from 'errors'
 import { UnexpectedOpeningBraceError } from 'errors'
+import { UnknownDeviceError } from 'errors'
 import { UnmatchedClosingBraceError } from 'errors'
 
 /**
@@ -117,10 +118,10 @@ it('should parse multiple properties',
  * Tests focused on parsing of media queries:
  */
 
-it('should parse device range blocks',
+it('should parse device range blocks targeting a specific device',
   () =>
   {
-    const styles = 'h1 { color = red\n @use for mobile only{ color = blue\n } }';
+    const styles = 'h1 { color = red\n @device mobile only{ color = blue\n } }';
 
     expect(parse(styles)).toEqual([
       {
@@ -129,7 +130,7 @@ it('should parse device range blocks',
         children: [
           {
             type: 'device-range',
-            selectors: ['@use for mobile only'],
+            selectors: ['(max-width:575px)'],
             declarations: [{ key: 'color', value: 'blue' }]
           }
         ]
@@ -241,8 +242,8 @@ it('should throw an error on property declarations outside of blocks',
 it('should throw an error on nested device range blocks',
   () =>
   {
-    const styles = 'h1{\ncolor=red\n@use for mobile only{\n' +
-      'color=blue\n@use for tablet..{\ncolor=green\n}\n}\n}';
+    const styles = 'h1{\ncolor=red\n@device mobile only{\n' +
+      'color=blue\n@device tablet ..{\ncolor=green\n}\n}\n}';
 
     expect(() => parse(styles)).toThrow(NestedDeviceRangeError);
   }
@@ -254,5 +255,14 @@ it('should throw an error on unexpected commas outside of selectors',
     const styles = 'h1, h2 { color = red\n , .child {} }';
 
     expect(() => parse(styles)).toThrow(UnexpectedCommaOutsideBlockError);
+  }
+);
+
+it('should throw an error when an unknown device name is encountered',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @device unknown only{ color = blue\n } }';
+
+    expect(() => parse(styles)).toThrow(UnknownDeviceError);
   }
 );

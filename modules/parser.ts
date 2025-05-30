@@ -3,13 +3,15 @@ import type { Property } from 'types'
 import type { Parser } from 'types'
 import type { ParserState } from 'types'
 
-import { MissingLineBreakAfterPropertyValueError } from 'errors'
+import { MissingLineBreakAfterPropertyValueError, UnknownDeviceError } from 'errors'
 import { NestedDeviceRangeError } from 'errors'
 import { PropertyDeclarationOutsideBlockError } from 'errors'
 import { UnexpectedCommaOutsideBlockError } from 'errors'
 import { UnexpectedEndOfStringError } from 'errors'
 import { UnexpectedOpeningBraceError } from 'errors'
 import { UnmatchedClosingBraceError } from 'errors'
+
+import { selectorParsers } from 'module:parser/selectors'
 
 /**
  * Parses a string of custom CSS-like input into a tree of blocks.
@@ -35,7 +37,8 @@ export const parse: Parser = (input) =>
     stack: [], tree: []
   };
 
-  input = input.replace(/\/\/[^\r\n]+(?=\n|$)/g, ''); // remove single-line comments.
+  // remove single-line comments:
+  input = input.replace(/\/\/[^\r\n]+(?=\n|$)/g, '');
 
   while (state.position < input.length)
   {
@@ -43,48 +46,21 @@ export const parse: Parser = (input) =>
 
     switch (character)
     {
-      case '{':
-        handleOpeningBrace(state);
-        break;
+      case '{': handleOpeningBrace(state); break;
+      case '}': handleClosingBrace(state); break;
+      case '[': handleOpeningBracket(state); break;
+      case ']': handleClosingBracket(state); break;
+      case '=': handleAssignment(state); break;
+      case ',': handleComma(state); break;
+      case '\n': handleLineBreak(state); break;
 
-      case '}':
-        handleClosingBrace(state);
-        break;
-
-      case '[':
-        handleOpeningBracket(state);
-        break;
-
-      case ']':
-        handleClosingBracket(state);
-        break;
-
-      case '=':
-        handleAssignment(state);
-        break;
-
-      case ',':
-        handleComma(state);
-        break;
-
-      case '\n':
-        handleLineBreak(state);
-        break;
-
-      default:
-        state.buffer += character; // add the current character to the buffer.
-        break;
+      // add the current character to the buffer:
+      default: state.buffer += character; break;
     }
 
-    if (character === '\n')
-    {
-      state.line++;
-      state.column = 1;
-    }
-    else
-    {
-      state.column++;
-    }
+    // update the line and column numbers:
+    state.line = (character === '\n') ? state.line + 1 : state.line;
+    state.column = (character === '\n') ? 1 : state.column + 1;
 
     state.position++; // move to the next character.
   }
@@ -118,32 +94,19 @@ const handleOpeningBrace = (state: ParserState) =>
     selectors: selector.split(',').map(selector => selector.trim())
   };
 
-  if (selector.startsWith('@use for '))
+  if (selector.startsWith('@device '))
   {
-    if (state.isDeviceRange)
-    {
-      throw new NestedDeviceRangeError(state.line, state.column);
-    }
-
-    block.type = 'device-range';
-    state.isDeviceRange = true;
+    selectorParsers.handleDeviceSelector(state, block);
   }
   else if (selector.startsWith('@state '))
   {
-    // ... handle translation of state selectors.
+    selectorParsers.handleStateSelector(block);
+  }
 
-    block.type = 'state';
-  }
-  else if (selector.startsWith('@theme '))
-  {
-    // ... handle merging with other media queries.
-
-    block.type = 'theme';
-  }
-  else if (selector.startsWith('@when '))
-  {
-    // ... handle merging with other media queries.
-  }
+  /**
+   * Adds the current block to the stack, either as a top-level block if the stack is empty,
+   * or as a child to the previous block on the stack.
+   */
 
   if (state.stack.length > 0)
   {

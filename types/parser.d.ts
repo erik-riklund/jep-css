@@ -10,8 +10,6 @@ export type ParserState = {
   buffer: string;
 
   /**
-   * The current character position.
-   * 
    * Used to keep track of the current position in the input string.
    */
   position: number;

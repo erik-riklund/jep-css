@@ -12,14 +12,19 @@ reducing the need for deep syntax knowledge.
 
 ---
 
-### 🧱 Nesting for enhanced readability
+### Nesting for enhanced readability
 
-?
+_A description will be added in the future._
 
-```scss
+```
 div
 {
-  h1
+  span // non-specific selector `div span`
+  {
+    color = red
+  }
+
+  @child element h1 // `div > h1`
   {
     color = green
 
@@ -27,9 +32,9 @@ div
     text-transform = uppercase
   }
 
-  &.some-class
+  @sibling class some-class // `div ~ .some-class`
   {
-    button
+    button // `div ~ .some-class button`
     {
       border-color = black
     }
@@ -39,39 +44,52 @@ div
 
 ---
 
-### 🎯 Targeting specific devices
+### ?
 
-?
+_A description will be added in the future._
 
-```scss
-@use for tablet only
+```
+div
 {
-  // used only on tablets (576px -> 1023px)
-}
-
-@use for ..laptop
-{
-  // used up to and including laptops (0px -> 1439px)
-}
-
-@use for laptop..
-{
-  // used from laptops and up (1024px +)
-}
-
-@use for tablet .. laptop
-{
-  // used from tablets to laptops (576px -> 1439px)
+  
 }
 ```
 
 ---
 
-### 🔮 Preferred color schemes
+### Targeting specific devices
 
-?
+_A description will be added in the future._
 
-```scss
+```
+@device tablet only
+{
+  // @media screen and (min-width: 576px) and (max-width: 1023px)
+}
+
+@device .. laptop
+{
+  // @media screen and (max-width: 1439px)
+}
+
+@device laptop ..
+{
+  // @media screen and (min-width: 1024px)
+}
+
+@device tablet .. laptop
+{
+  // @media screen and (min-width: 576px) and (max-width: 1439px)
+}
+```
+
+---
+
+### Preferred color schemes
+
+_A description will be added in the future._
+
+```
 div
 {
   background-color = white
@@ -85,17 +103,17 @@ div
 
 ---
 
-### 🔰 State management
+### State management
 
-?
+_A description will be added in the future._
 
-```scss
+```
 div
 {
   @state collapsed
   {
     // the selector is translated to `div.collapsed`.
-    // 
+    
     // `collapsed` is only an example, the class name can be anything.
   }
 
@@ -120,9 +138,9 @@ div
 
 ### ?
 
-?
+_A description will be added in the future._
 
-```scss
+```
 div
 {
   @when empty
@@ -139,21 +157,36 @@ div
 
 ---
 
-### ?
+### Relational selectors
 
-?
+_A description will be added in the future._
 
-```scss
+```
 div
 {
-  @has span
+  @has child span
   {
-    // `div:has(span)`
+    // `div:has(> span)`
   }
 
-  @has not span
+  @has descendant span
   {
-    // `div:not(:has(span))`
+    // `div:has(> * > span)`
+  }
+  
+  @has sibling span
+  {
+    // `div:has(~ span)`
+  }
+
+  @has adjacent span
+  {
+    // `div:has(+ span)`
+  }
+
+  @has adjacent span where data-template is "foo"
+  {
+    // `div:has(+ span[data-template="foo"])`
   }
 }
 ```
@@ -162,9 +195,9 @@ div
 
 ### ?
 
-?
+_A description will be added in the future._
 
-```scss
+```
 div
 {
   @on hover

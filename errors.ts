@@ -129,15 +129,15 @@ export class UnmatchedClosingBraceError extends LanguageError
 }
 
 /**
- * An error thrown when an unknown device range is encountered.
+ * An error thrown when an unknown device name is encountered.
  * 
- * @param deviceRange The specified device range.
+ * @param deviceRange The specified device name.
  */
-export class UnknownDeviceRangeError extends LanguageError
+export class UnknownDeviceError extends LanguageError
 {
-  constructor(deviceRange: string)
+  constructor(deviceName: string, line: number, column: number)
   {
-    super(`Unsupported device range "${ deviceRange }"`);
+    super(`Unknown device "${ deviceName }"`, line, column);
 
     this.name = 'UnknownDeviceRangeError';
   }
