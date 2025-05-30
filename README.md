@@ -4,21 +4,17 @@ _Don't replace the engine, just give it a more elegant dashboard._
 
 > Please note that this project is in early development. 🚧
 
-Inventing a new language that translates to CSS? Yes, that's exactly what's going on here. 🚀
+**Just Enough Styling (JES)** reshapes how we write CSS by introducing a more human-friendly, declarative syntax that uses plain language to describe styles. It brings clarity and structure to styling, allowing you to compose stylesheets that are easier to read, write, and maintain.
 
 <img src=dashboard.png style="max-width:100%"><br>
 
-The language reshapes CSS expression, offering a more human-friendly, declarative alternative
-without intending to replace it. It provides a more intuitive way to compose stylesheets,
-reducing the need for deep syntax knowledge.
-
-The best part of JES is its progressive approach. You can use only the rules you need, and only the features you need. You can blend in standard CSS selectors to handle edge cases if the need arise - JES is flexible enough to handle any situation.
+JES is progressive and flexible by design. You can adopt it incrementally — use its expressive, built-in constructs for common patterns, and fall back on standard CSS selectors whenever needed. Whether you're building simple layouts or handling complex edge cases, JES adapts to your workflow without getting in the way.
 
 ---
 
 ### Nesting for enhanced readability ✔️
 
-Nesting isn't a new idea — it’s a familiar pattern from SCSS and similar preprocessors. In JES, it improves readability by keeping related selectors visually grouped. It's a clean, structured way to reflect hierarchy without repeating parent selectors.
+Nesting is a familiar pattern from SCSS and similar preprocessors. It improves readability by keeping related selectors visually grouped. It's a clean, structured way to reflect hierarchy without repeating parent selectors.
 
 ```
 div
@@ -48,9 +44,9 @@ form
 
 ---
 
-### Targeting specific devices ✔️
+### `@device` ✔️
 
-JES provides a clean, readable syntax for responsive design. The `@device` rule lets you define styles for common breakpoints without writing verbose media queries. Use ranges combined with keywords like `tablet` or `laptop` to express intent directly.
+The `@device` rule simplifies responsive design by replacing verbose media queries with clear, intent-driven syntax. Use readable keywords like `tablet` and `laptop` to target breakpoints directly — making your styles more concise and meaningful.
 
 ```
 @device tablet only
@@ -78,9 +74,9 @@ JES provides a clean, readable syntax for responsive design. The `@device` rule 
 
 ---
 
-### Preferred color schemes ✔️
+### `@theme` ✔️
 
-JES makes it easy to adapt styles to the user’s system theme. The `@theme` rule maps directly to `prefers-color-scheme`, letting you define light and dark mode styles inline, right where they’re relevant.
+The `@theme` rule ties directly to `prefers-color-scheme`, making it easy to define light and dark mode styles inline — right where they matter. No need to separate theme logic from your core styles.
 
 ```
 div
@@ -96,9 +92,9 @@ div
 
 ---
 
-### State management ✔️
+### `@state` ✔️
 
-JES simplifies class-based state styling with the `@state` rule. It provides a clear, expressive way to define styles based on class presence, combinations, and negations without manually crafting complex selectors.
+The `@state` rule offers a clear, expressive way to style elements based on class presence without writing complex selectors by hand. It makes conditional styling more intuitive and readable.
 
 ```
 div
@@ -129,9 +125,71 @@ div
 
 ---
 
-### Styling based on the presence of elements 🧠
+### `@child`, `@sibling`, and `@adjacent` 🛠️
 
-With the `@has` rule, JES makes it easy to style elements based on what’s around or inside them. Whether it’s a child, descendant, sibling, or adjacent element, you can express structural conditions in a clean, readable way without diving into complex selector syntax.
+The `@child`, `@sibling`, and `@adjacent` rules give you direct, readable control over element relationships. They map to standard CSS combinators, letting you express structure clearly without resorting to verbose selectors.
+
+```
+div
+{
+  @child span
+  {
+    // `div > span`
+  }
+
+  @child class foo
+  {
+    // `div > .foo`
+  }
+
+  @sibling span
+  {
+    // `div ~ span`
+  }
+
+  @adjacent span
+  {
+    // `div + span`
+  }
+}
+```
+
+---
+
+### `@attribute` 🧠
+
+The `@attribute` rule turns dense attribute selectors into clear, plain-language expressions. Whether you're checking for existence, matching values, or applying negations, it makes attribute-based styling far more intuitive.
+
+```
+div
+{
+  @attribute foo
+  {
+    // `div[foo]`
+  }
+
+  @attribute foo missing
+  {
+    // `div:not([foo])`
+  }
+
+  @attribute foo equals "bar"
+  {
+    // `div[foo="bar"]`
+  }
+
+  @attribute foo not equals "bar"
+  {
+    // `div:not([foo="bar"])`
+  }
+}
+```
+
+---
+
+### `@has` 🧠
+
+The `@has` rule lets you style elements based on their surrounding or nested content—children, descendants, siblings, or adjacent elements. It brings structural conditions into a clean, readable format without complex selector syntax.
 
 ```
 div
@@ -146,11 +204,6 @@ div
     // `div:has(> .foo)`
   }
 
-  @has descendant span
-  {
-    // `div:has(> * > span)`
-  }
-  
   @has sibling span
   {
     // `div:has(~ span)`
@@ -160,14 +213,19 @@ div
   {
     // `div:has(+ span)`
   }
+
+  @has descendant span
+  {
+    // `div:has(span)`
+  }
 }
 ```
 
 ---
 
-### Pseudo-classes made simple 🧠
+### `@when` 🧠
 
-The `@when` rule in JES lets you work with pseudo-classes like `:hover` or `:disabled` in a natural, readable way. It supports negation and mirrors the logic used in `@state`, but targets dynamic states and element conditions instead of class names.
+The `@when` rule makes working with pseudo-classes like `:hover` or `:disabled` feel natural and readable. It supports negation and mirrors the logic of `@state`, but targets dynamic states and element conditions instead of class-based logic.
 
 ```
 div
