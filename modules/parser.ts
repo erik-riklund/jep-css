@@ -94,8 +94,9 @@ const handleOpeningBrace = (state: ParserState) =>
 
   switch (rule)
   {
-    case '@child': selectorParsers.handleChildSelector(block); break;
     case '@adjacent': selectorParsers.handleAdjacentSelector(block); break;
+    case '@attribute': selectorParsers.handleAttributeSelector(block); break;
+    case '@child': selectorParsers.handleChildSelector(block); break;
     case '@device': selectorParsers.handleDeviceSelector(state, block); break;
     case '@sibling': selectorParsers.handleSiblingSelector(block); break;
     case '@state': selectorParsers.handleStateSelector(block); break;

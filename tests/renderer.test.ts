@@ -161,3 +161,47 @@ it('should render a sibling class selector',
     expect(render(parse(styles))).toEqual(expected);
   }
 );
+
+/**
+ * Tests focused on targeting attributes:
+ */
+
+it('should render an attribute selector',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @attribute foo exists{ color = blue\n } }';
+    const expected = 'h1{color:red}h1[foo]{color:blue}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);
+
+it('should render an inverted attribute selector',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @attribute foo is missing{ color = blue\n } }';
+    const expected = 'h1{color:red}h1:not([foo]){color:blue}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);
+
+it('should render an attribute value selector',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @attribute foo is "bar"{ color = blue\n } }';
+    const expected = 'h1{color:red}h1[foo="bar"]{color:blue}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);
+
+it('should render an inverted attribute value selector',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @attribute foo is not "bar"{ color = blue\n } }';
+    const expected = 'h1{color:red}h1:not([foo="bar"]){color:blue}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);

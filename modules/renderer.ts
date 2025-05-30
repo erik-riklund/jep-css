@@ -85,8 +85,6 @@ export const renderCurrentBlock = (group: string, state: RenderState) =>
 
     for (const selector of currentBlock.selectors)
     {
-      console.log({ selector })
-
       selectors.push(
         selector.startsWith('&') ? currentBlock.parent + selector.slice(1)
           : (currentBlock.parent ? `${ currentBlock.parent } ${ selector }` : selector)

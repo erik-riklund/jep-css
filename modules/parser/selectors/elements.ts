@@ -7,8 +7,6 @@ export const handleChildSelector = (block: Block) =>
 {
   block.type = 'child';
 
-  console.log({ block })
-
   block.selectors = [...block.selectors.map(
     selector => `&>${ parseElementSelector(selector) }`)
   ];

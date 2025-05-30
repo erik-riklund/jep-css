@@ -1,7 +1,6 @@
 import type { Preprocessor } from 'types'
 
 import { parse } from 'module:parser'
-import { interpolate } from 'module:interpolator'
 import { render } from 'module:renderer'
 
 /**
@@ -12,8 +11,16 @@ import { render } from 'module:renderer'
 export const preprocess: Preprocessor =
 {
   // ~
-  toString (input, context = {})
+  toString (input)
   {
-    return render(parse(interpolate(input, context)));
+    return render(parse(input));
   }
 }
+
+/**
+ * ?
+ */
+export const postprocess = () =>
+{
+  throw new Error('Not implemented yet');
+};

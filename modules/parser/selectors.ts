@@ -1,4 +1,5 @@
 import { handleAdjacentSelector } from './selectors/elements'
+import { handleAttributeSelector } from './selectors/attribute'
 import { handleChildSelector } from './selectors/elements'
 import { handleDeviceSelector } from './selectors/device'
 import { handleSiblingSelector } from './selectors/elements'
@@ -11,6 +12,7 @@ import { handleThemeSelector } from './selectors/theme'
 export const selectorParsers =
 {
   handleAdjacentSelector,
+  handleAttributeSelector,
   handleChildSelector,
   handleDeviceSelector,
   handleSiblingSelector,
