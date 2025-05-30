@@ -6,9 +6,13 @@ _Don't replace the engine, just give it a more elegant dashboard._
 
 Inventing a new language that translates to CSS? Yes, that's exactly what's going on here. 🚀
 
+<img src=dashboard.png style="max-width:100%"><br>
+
 The language reshapes CSS expression, offering a more human-friendly, declarative alternative
 without intending to replace it. It provides a more intuitive way to compose stylesheets,
 reducing the need for deep syntax knowledge.
+
+The best part of JES is its progressive approach. You can use only the rules you need, and only the features you need. You can blend in standard CSS selectors to handle edge cases if the need arise - JES is flexible enough to handle any situation.
 
 ---
 
@@ -125,30 +129,9 @@ div
 
 ---
 
-### ? 🧠
+### Styling based on the presence of elements 🧠
 
-_A description will be added in the future._
-
-```
-div
-{
-  @when empty
-  {
-    // `div:empty`
-  }
-
-  @when not empty
-  {
-    // `div:not(:empty)`
-  }
-}
-```
-
----
-
-### Relational selectors 🧠
-
-_A description will be added in the future._
+With the `@has` rule, JES makes it easy to style elements based on what’s around or inside them. Whether it’s a child, descendant, sibling, or adjacent element, you can express structural conditions in a clean, readable way without diving into complex selector syntax.
 
 ```
 div
@@ -156,6 +139,11 @@ div
   @has child span
   {
     // `div:has(> span)`
+  }
+
+  @has child class foo
+  {
+    // `div:has(> .foo)`
   }
 
   @has descendant span
@@ -172,36 +160,36 @@ div
   {
     // `div:has(+ span)`
   }
-
-  @has adjacent span where data-template is "foo"
-  {
-    // `div:has(+ span[data-template="foo"])`
-  }
 }
 ```
 
 ---
 
-### ? 🧠
+### Pseudo-classes made simple 🧠
 
-_A description will be added in the future._
+The `@when` rule in JES lets you work with pseudo-classes like `:hover` or `:disabled` in a natural, readable way. It supports negation and mirrors the logic used in `@state`, but targets dynamic states and element conditions instead of class names.
 
 ```
 div
 {
-  @on hover
+  @when hovered
   {
     // `div:hover`
   }
 
-  @on disabled
+  @when disabled
   {
     // `div:disabled`
   }
 
-  @on not disabled
+  @when not disabled
   {
     // `div:not(:disabled)`
+  }
+
+  @when empty
+  {
+    // `div:empty`
   }
 }
 ```
