@@ -3,8 +3,7 @@ import type { Property } from 'types'
 import type { Parser } from 'types'
 import type { ParserState } from 'types'
 
-import { MissingLineBreakAfterPropertyValueError, UnknownDeviceError } from 'errors'
-import { NestedDeviceRangeError } from 'errors'
+import { MissingLineBreakAfterPropertyValueError } from 'errors'
 import { PropertyDeclarationOutsideBlockError } from 'errors'
 import { UnexpectedCommaOutsideBlockError } from 'errors'
 import { UnexpectedEndOfStringError } from 'errors'
@@ -90,21 +89,17 @@ const handleOpeningBrace = (state: ParserState) =>
     throw new UnexpectedOpeningBraceError(state.line, state.column);
   }
 
-  const block: Block = {
-    selectors: selector.split(',').map(selector => selector.trim())
-  };
+  const block: Block = { selectors: selector.split(',').map(selector => selector.trim()) };
+  const rule = selector.slice(0, selector.indexOf(' '));
 
-  if (selector.startsWith('@device '))
+  switch (rule)
   {
-    selectorParsers.handleDeviceSelector(state, block);
-  }
-  else if (selector.startsWith('@state '))
-  {
-    selectorParsers.handleStateSelector(block);
-  }
-  else if (selector.startsWith('@theme '))
-  {
-    selectorParsers.handleThemeSelector(state, block);
+    case '@child': selectorParsers.handleChildSelector(block); break;
+    case '@adjacent': selectorParsers.handleAdjacentSelector(block); break;
+    case '@device': selectorParsers.handleDeviceSelector(state, block); break;
+    case '@sibling': selectorParsers.handleSiblingSelector(block); break;
+    case '@state': selectorParsers.handleStateSelector(block); break;
+    case '@theme': selectorParsers.handleThemeSelector(state, block); break;
   }
 
   /**

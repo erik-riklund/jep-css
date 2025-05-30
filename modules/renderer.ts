@@ -2,8 +2,6 @@ import type { Property } from 'types'
 import type { Renderer } from 'types'
 import type { RenderState } from 'types'
 
-import { renderDeviceRange } from 'module:renderer/device-range'
-
 /**
  * Renders a style tree into a string of valid CSS.
  * 
@@ -32,56 +30,88 @@ export const render: Renderer = (tree) =>
  */
 export const renderCurrentBlock = (group: string, state: RenderState) =>
 {
-  // const currentBlock = state.currentBlock!;
+  const currentBlock = state.currentBlock!;
 
-  // if (!state.result[group])
-  // {
-  //   state.result[group] = []; // initialize the output group.
-  // }
+  if (!state.result[group])
+  {
+    state.result[group] = []; // initialize the output group.
+  }
 
-  // /**
-  //  * ?
-  //  */
+  if (currentBlock.type === 'device-range')
+  {
+    state.result[group].push(`@media screen and${ currentBlock.selectors[0] }{`);
 
-  // if (currentBlock.type === 'theme')
-  // {
-  //   // ...
-  // }
-  // else if (currentBlock.type === 'device-range')
-  // {
-  //   renderDeviceRange(state, group, currentBlock);
-  // }
-  // else
-  // {
-  //   const selectors: string[] = [];
+    if (currentBlock.declarations)
+    {
+      state.result[group].push(
+        `${ currentBlock.parent }{`, renderProperties(currentBlock.declarations), '}'
+      );
+    }
 
-  //   for (const selector of currentBlock.selectors)
-  //   {
-  //     selectors.push(
-  //       selector.startsWith('&') ? currentBlock.parent + selector.slice(1)
-  //         : (currentBlock.parent ? `${ currentBlock.parent } ${ selector }` : selector)
-  //     );
-  //   }
+    if (currentBlock.children)
+    {
+      for (const child of currentBlock.children)
+      {
+        state.currentBlock = { ...child, parent: currentBlock.parent };
 
-  //   const path = selectors.join(',');
+        renderCurrentBlock(group, state);
+      }
+    }
 
-  //   if (currentBlock.declarations)
-  //   {
-  //     state.result[group].push(
-  //       `${ path }{${ renderProperties(currentBlock.declarations) }}`
-  //     );
-  //   }
+    state.result[group].push('}');
+  }
+  else if (currentBlock.type === 'theme')
+  {
+    if (currentBlock.declarations)
+    {
+      state.result[group].push(
+        `${ currentBlock.parent }{`, renderProperties(currentBlock.declarations), '}'
+      );
+    }
 
-  //   if (currentBlock.children)
-  //   {
-  //     for (const child of currentBlock.children)
-  //     {
-  //       state.currentBlock = { ...child, parent: path };
+    if (currentBlock.children)
+    {
+      for (const child of currentBlock.children)
+      {
+        state.currentBlock = { ...child, parent: currentBlock.parent };
 
-  //       renderCurrentBlock(group, state);
-  //     }
-  //   }
-  // }
+        renderCurrentBlock(group, state);
+      }
+    }
+  }
+  else
+  {
+    const selectors: string[] = [];
+
+    for (const selector of currentBlock.selectors)
+    {
+      console.log({ selector })
+
+      selectors.push(
+        selector.startsWith('&') ? currentBlock.parent + selector.slice(1)
+          : (currentBlock.parent ? `${ currentBlock.parent } ${ selector }` : selector)
+      );
+    }
+
+    const path = selectors.join(',');
+
+    if (currentBlock.declarations)
+    {
+      state.result[group].push(
+        `${ path }{${ renderProperties(currentBlock.declarations) }}`
+      );
+    }
+
+    if (currentBlock.children)
+    {
+      for (const child of currentBlock.children)
+      {
+        state.currentBlock = { ...child, parent: path };
+
+        renderCurrentBlock(group, state);
+      }
+    }
+  }
 }
 
 /**

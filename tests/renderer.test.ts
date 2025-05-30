@@ -2,40 +2,38 @@ import { it, expect } from 'bun:test'
 import { parse } from 'module:parser';
 import { render } from 'module:renderer'
 
-import { renderDeviceRange } from 'module:renderer/device-range'
-
 /**
  * Tests focused on basic functionality:
  */
 
-it.todo('should return an empty string',
+it('should return an empty string',
   () => expect(render([])).toEqual('')
 );
 
-it.todo('should render a single block',
+it('should render a single block',
   () =>
   {
-    const styles = 'h1 { color = red; }';
+    const styles = 'h1 { color = red\n }';
     const expected = 'h1{color:red}';
 
     expect(render(parse(styles))).toEqual(expected);
   }
 );
 
-it.todo('should render multiple blocks',
+it('should render multiple blocks',
   () =>
   {
-    const styles = 'h1 { color = red; } h2 { color = blue; }';
+    const styles = 'h1 { color = red\n } h2 { color = blue\n }';
     const expected = 'h1{color:red}h2{color:blue}';
 
     expect(render(parse(styles))).toEqual(expected);
   }
 );
 
-it.todo('should render nested blocks',
+it('should render nested blocks',
   () =>
   {
-    const styles = 'h1 { color = red; span { color = blue; } }';
+    const styles = 'h1 { color = red\n span { color = blue\n } }';
     const expected = 'h1{color:red}h1 span{color:blue}';
 
     expect(render(parse(styles))).toEqual(expected);
@@ -43,14 +41,122 @@ it.todo('should render nested blocks',
 );
 
 /**
- * Tests focused on device ranges:
+ * Tests focused on media queries:
  */
 
-it.todo('should render `@use-for (* only)` blocks',
+it('should render `@device * only` blocks',
   () =>
   {
-    const styles = 'h1 { color = red; @use-for (tablet only){ color = blue; } }';
+    const styles = 'h1 { color = red\n @device tablet only{ color = blue\n } }';
     const expected = 'h1{color:red}@media screen and(min-width:576px)and(max-width:1023px){h1{color:blue}}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);
+
+it('should render a `@theme` selector inside a device range',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @device tablet ..{ @theme light{ color = blue\n } } }';
+    const expected = 'h1{color:red}@media screen and(min-width:576px)and(prefers-color-scheme:light){h1{color:blue}}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+)
+
+/**
+ * Tests focused on the `@state` rule:
+ */
+
+it('should render a basic @state rule',
+  () =>
+  {
+    const styles = 'button { color = black\n @state error{ color = red\n } }';
+    const expected = 'button{color:black}button.error{color:red}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);
+
+it('should render an inverted @state rule',
+  () =>
+  {
+    const styles = 'button {@state not disabled{ color = green\n } }';
+    const expected = 'button:not(.disabled){color:green}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);
+
+it('should render a @state rule with chained selectors',
+  () =>
+  {
+    const styles = 'button {@state active and not loading{ color = green\n } }';
+    const expected = 'button.active:not(.loading){color:green}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);
+
+it('should render a @state rule with an inverted chained selector',
+  () =>
+  {
+    const styles = 'button {@state active and not loading and not disabled{ color = green\n } }';
+    const expected = 'button.active:not(.loading):not(.disabled){color:green}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);
+
+/**
+ * Tests focused on targeting child elements:
+ */
+
+it('should render a child element selector',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @child span{ color = blue\n } }';
+    const expected = 'h1{color:red}h1>span{color:blue}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);
+
+it('should render a child class selector',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @child class foo{ color = blue\n } }';
+    const expected = 'h1{color:red}h1>.foo{color:blue}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);
+
+it('should render multiple child selectors',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @child span, @child class foo{ color = blue\n } }';
+    const expected = 'h1{color:red}h1>span,h1>.foo{color:blue}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+)
+
+it('should render a sibling element selector',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @sibling h2{ color = blue\n } }';
+    const expected = 'h1{color:red}h1~h2{color:blue}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);
+
+it('should render a sibling class selector',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @sibling class foo{ color = blue\n } }';
+    const expected = 'h1{color:red}h1~.foo{color:blue}';
 
     expect(render(parse(styles))).toEqual(expected);
   }
