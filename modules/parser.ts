@@ -133,6 +133,10 @@ const handleOpeningBrace = (state: ParserState) =>
         selectorParsers.handleThemeSelector(state, block);
         break;
 
+      case '@when':
+        block.selectors[i] = selectorParsers.handleWhenSelector(currentSelector);
+        break;
+
       case '@with':
         block.selectors[i] = selectorParsers.handleWithSelector(currentSelector);
         break;

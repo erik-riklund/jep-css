@@ -93,7 +93,7 @@ The `@device` rule simplifies responsive design by replacing verbose media queri
 The `@theme` rule ties directly to `prefers-color-scheme`, making it easy to define light and dark mode styles inline — right where they matter. No need to separate theme logic from your core styles.
 
 ```
-div
+*
 {
   background-color = white
 
@@ -111,28 +111,28 @@ div
 The `@state` rule provides a clear, expressive way to apply styles based on class presence. It simplifies conditional styling and avoids the need for complex, manual selectors.
 
 ```
-div
+*
 {
   @state collapsed
   {
-    // the selector is translated to `div.collapsed`.
+    // the selector is translated to `*.collapsed`.
     
     // `collapsed` is only an example, the class name can be anything.
   }
 
   @state not disabled
   {
-    // `div:not(.disabled)`
+    // `*:not(.disabled)`
   }
 
   @state expanded and active
   {
-    // `div.expanded.active`
+    // `*.expanded.active`
   }
 
   @state expanded and not loading and active
   {
-    // `div.expanded:not(.loading).active`
+    // `*.expanded:not(.loading).active`
   }
 }
 ```
@@ -144,26 +144,26 @@ div
 The `@child`, `@sibling`, and `@adjacent` rules give you direct, readable control over element relationships. They map to standard CSS combinators, letting you express structure clearly without resorting to verbose selectors.
 
 ```
-div
+*
 {
   @child span
   {
-    // `div > span`
+    // `* > span`
   }
 
   @child class foo
   {
-    // `div > .foo`
+    // `* > .foo`
   }
 
   @sibling span
   {
-    // `div ~ span`
+    // `* ~ span`
   }
 
   @adjacent span
   {
-    // `div + span`
+    // `* + span`
   }
 }
 ```
@@ -175,26 +175,26 @@ div
 The `@attribute` rule lets you style elements based on attributes. It can be used to target elements with specific attributes, attribute values, or the absence of an attribute.
 
 ```
-div
+*
 {
   @attribute foo exists
   {
-    // `div[foo]`
+    // `*[foo]`
   }
 
   @attribute foo is missing
   {
-    // `div:not([foo])`
+    // `*:not([foo])`
   }
 
   @attribute foo is "bar"
   {
-    // `div[foo="bar"]`
+    // `*[foo="bar"]`
   }
 
   @attribute foo is not "bar"
   {
-    // `div:not([foo="bar"])`
+    // `*:not([foo="bar"])`
   }
 }
 ```
@@ -206,46 +206,46 @@ div
 The `@with` rule lets you style elements based on nearby or nested content — children, siblings, or adjacent elements. It expresses structural conditions in a clean, readable way, without relying on verbose selectors.
 
 ```
-div
+*
 {
   @with child span
   {
-    // `div:has(> span)`
+    // `*:has(> span)`
   }
 
   @with child class foo
   {
-    // `div:has(> .foo)`
+    // `*:has(> .foo)`
   }
 
   @with sibling span
   {
-    // `div:has(~ span)`
+    // `*:has(~ span)`
   }
 
   @with sibling class foo
   {
-    // `div:has(~ .foo)`
+    // `*:has(~ .foo)`
   }
 
   @with adjacent span
   {
-    // `div:has(+ span)`
+    // `*:has(+ span)`
   }
 
   @with adjacent class foo
   {
-    // `div:has(+ .foo)`
+    // `*:has(+ .foo)`
   }
 
   @with descendant span
   {
-    // `div:has(span)`
+    // `*:has(span)`
   }
 
   @with descendant class foo
   {
-    // `div:has(.foo)`
+    // `*:has(.foo)`
   }
 }
 ```
@@ -257,26 +257,86 @@ div
 The `@when` rule makes working with pseudo-classes like `:hover` or `:disabled` feel natural and readable. It supports negation and mirrors the logic of `@state`, but targets dynamic states and element conditions instead of class-based logic.
 
 ```
-div
+*
 {
-  @when hovered
+  @when active
   {
-    // `div:hover`
+    // `*:active`
+  }
+
+  @when checked
+  {
+    // `*:checked`
   }
 
   @when disabled
   {
-    // `div:disabled`
-  }
-
-  @when not disabled
-  {
-    // `div:not(:disabled)`
+    // `*:disabled`
   }
 
   @when empty
   {
-    // `div:empty`
+    // `*:empty`
+  }
+
+  @when enabled
+  {
+    // `*:enabled`
+  }
+
+  @when focused
+  {
+    // `*:focus`
+  }
+
+  @when focused visibly
+  {
+    // `*:focus-visible`
+  }
+
+  @when focused within
+  {
+    // `*:focus-within`
+  }
+
+  @when hovered
+  {
+    // `*:hover`
+  }
+
+  @when optional
+  {
+    // `*:optional`
+  }
+
+  @when required
+  {
+    // `*:required`
+  }
+
+  @when valid input
+  {
+    // `*:valid`
+  }
+
+  @when visited
+  {
+    // `*:visited`
+  }
+}
+```
+
+?
+
+```
+input
+{
+  @attribute type is "checkbox"
+  {
+    @when not valid and not disabled
+    {
+      // `input:not(:valid):not(:disabled)`
+    }
   }
 }
 ```
@@ -288,26 +348,26 @@ div
 ?
 
 ```
-div
+*
 {
   @first
   {
-    // `div:first-of-type`
+    // `*:first-of-type`
   }
 
   @last
   {
-    // `div:last-of-type`
+    // `*:last-of-type`
   }
 
   @position 2
   {
-    // `div:nth-of-type(2)`
+    // `*:nth-of-type(2)`
   }
 
   @position -2
   {
-    // `div:nth-last-of-type(2)`
+    // `*:nth-last-of-type(2)`
   }
 }
 ```
