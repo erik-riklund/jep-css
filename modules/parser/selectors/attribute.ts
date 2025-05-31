@@ -1,37 +1,27 @@
 /**
- * Responsible for handling attribute selectors.
- * 
- * @param block The block to handle.
- */
-export const handleAttributeSelector = (selector: string) =>
-{
-  return parseAttributeSelector(selector);
-}
-
-/**
  * Parses an attribute selector into a CSS selector.
  * 
- * @param selector The attribute selector to parse.
+ * @param rule The attribute selector to parse.
  * @returns The parsed CSS selector.
  */
-export const parseAttributeSelector = (selector: string) =>
+export const parseAttributeRule = (rule: string) =>
 {
-  selector = selector.replace(/^@attribute/, '').trim();
-  const attribute = selector.slice(0, selector.indexOf(' '));
+  rule = rule.replace(/^@attribute/, '').trim();
+  const attribute = rule.slice(0, rule.indexOf(' '));
 
-  if (selector.endsWith(' exists'))
+  if (rule.endsWith(' exists'))
   {
     return `&[${ attribute }]`;
   }
-  else if (selector.endsWith(' is missing'))
+  else if (rule.endsWith(' is missing'))
   {
     return `&:not([${ attribute }])`;
   }
 
-  const value = selector.slice(
-    selector.indexOf('"'), selector.lastIndexOf('"') + 1
+  const value = rule.slice(
+    rule.indexOf('"'), rule.lastIndexOf('"') + 1
   );
-  const isInverted = selector.startsWith(`${ attribute } is not `);
+  const isInverted = rule.startsWith(`${ attribute } is not `);
 
   return isInverted ? `&:not([${ attribute }=${ value }])` : `&[${ attribute }=${ value }]`;
 }

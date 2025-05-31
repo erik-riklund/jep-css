@@ -21,15 +21,7 @@ type Plugins = {
 export const useStyles = (plugins: Partial<Plugins> = {}) =>
 {
   return {
-    /**
-     * ?
-     */
-    parse: (input: string) => parse(input),
-
-    /**
-     * ?
-     */
-    render: (tree: Tree) => render(tree),
+    parse, render,
 
     /**
      * ?
@@ -42,7 +34,7 @@ export const useStyles = (plugins: Partial<Plugins> = {}) =>
       }
 
       const tree = parse(input);
-      const output = render(tree);
+      const output = render(tree, context);
 
       return !plugins.postprocess ? output :
         executePostprocessors(plugins.postprocess, output, tree);

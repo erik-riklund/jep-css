@@ -1,15 +1,4 @@
 /**
- * Responsible for handling `@position` selectors.
- * 
- * @param selector The `@position` selector to handle.
- * @returns The parsed CSS selector.
- */
-export const handlePositionSelector = (selector: string) =>
-{
-  return parsePositionRule(selector);
-}
-
-/**
  * Parse the provided `@position` rule.
  * 
  * @param rule The `@position` rule to parse.

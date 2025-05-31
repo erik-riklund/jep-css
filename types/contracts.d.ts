@@ -36,4 +36,4 @@ export type PostprocessPlugin = (output: string, tree: Tree) => string;
  * @param tree The tree to render.
  * @returns The rendered output.
  */
-export type Renderer = (tree: Tree) => string;
+export type Renderer = (tree: Tree, context: Context) => string;

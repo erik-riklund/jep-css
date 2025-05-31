@@ -19,17 +19,6 @@ const pseudoClasses =
 }
 
 /**
- * Responsible for handling `@when` selectors.
- * 
- * @param selector The `@when` selector to handle.
- * @returns The parsed CSS selector.
- */
-export const handleWhenSelector = (selector: string) =>
-{
-  return parseWhenRule(selector);
-}
-
-/**
  * Parse the provided `@when` rule.
  * 
  * @param rule The `@when` rule to parse.

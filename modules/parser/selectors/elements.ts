@@ -1,31 +1,31 @@
 /**
  * ?
  */
-export const handleChildSelector = (selector: string) =>
+export const parseChildRule = (rule: string) =>
 {
-  return `&>${ parseElementSelector(selector) }`;
+  return `&>${ parseElementRule(rule) }`;
 };
 
 /**
  * ?
  */
-export const handleSiblingSelector = (selector: string) =>
+export const parseSiblingRule = (rule: string) =>
 {
-  return `&~${ parseElementSelector(selector) }`;
+  return `&~${ parseElementRule(rule) }`;
 };
 
 /**
  * ?
  */
-export const handleAdjacentSelector = (selector: string) =>
+export const parseAdjacentRule = (rule: string) =>
 {
-  return `&+${ parseElementSelector(selector) }`;
+  return `&+${ parseElementRule(rule) }`;
 };
 
 /**
  * ?
  */
-export const parseElementSelector = (selector: string) =>
+export const parseElementRule = (rule: string) =>
 {
-  return selector.replace(/^@[^\s]+/, '').trim().replace(/class\s+/, '.');
+  return rule.replace(/^@[^\s]+/, '').trim().replace(/class\s+/, '.');
 };

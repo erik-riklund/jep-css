@@ -10,7 +10,7 @@ import { UnexpectedEndOfStringError } from 'errors'
 import { UnexpectedOpeningBraceError } from 'errors'
 import { UnmatchedClosingBraceError } from 'errors'
 
-import { selectorParsers } from 'module:parser/selectors'
+import { selectorParsers } from 'module:parser/rules'
 
 /**
  * Parses a string of custom CSS-like input into a tree of blocks.
@@ -106,15 +106,15 @@ const handleOpeningBrace = (state: ParserState) =>
     switch (rule)
     {
       case '@adjacent':
-        block.selectors[i] = selectorParsers.handleAdjacentSelector(currentSelector);
+        block.selectors[i] = selectorParsers.parseAdjacentRule(currentSelector);
         break;
 
       case '@attribute':
-        block.selectors[i] = selectorParsers.handleAttributeSelector(currentSelector);
+        block.selectors[i] = selectorParsers.parseAttributeRule(currentSelector);
         break;
 
       case '@child':
-        block.selectors[i] = selectorParsers.handleChildSelector(currentSelector);
+        block.selectors[i] = selectorParsers.parseChildRule(currentSelector);
         break;
 
       case '@device':
@@ -122,23 +122,23 @@ const handleOpeningBrace = (state: ParserState) =>
         break;
 
       case '@first':
-        block.selectors[i] = selectorParsers.handlePositionSelector('@position 1');
+        block.selectors[i] = selectorParsers.parsePositionRule('@position 1');
         break;
 
       case '@last':
-        block.selectors[i] = selectorParsers.handlePositionSelector('@position -1');
+        block.selectors[i] = selectorParsers.parsePositionRule('@position -1');
         break;
 
       case '@position':
-        block.selectors[i] = selectorParsers.handlePositionSelector(currentSelector);
+        block.selectors[i] = selectorParsers.parsePositionRule(currentSelector);
         break;
 
       case '@sibling':
-        block.selectors[i] = selectorParsers.handleSiblingSelector(currentSelector);
+        block.selectors[i] = selectorParsers.parseSiblingRule(currentSelector);
         break;
 
       case '@state':
-        block.selectors[i] = selectorParsers.handleStateSelector(currentSelector);
+        block.selectors[i] = selectorParsers.parseStateRule(currentSelector);
         break;
 
       case '@theme':
@@ -146,11 +146,11 @@ const handleOpeningBrace = (state: ParserState) =>
         break;
 
       case '@when':
-        block.selectors[i] = selectorParsers.handleWhenSelector(currentSelector);
+        block.selectors[i] = selectorParsers.parseWhenRule(currentSelector);
         break;
 
       case '@with':
-        block.selectors[i] = selectorParsers.handleWithSelector(currentSelector);
+        block.selectors[i] = selectorParsers.parseWithRule(currentSelector);
         break;
     }
   }
