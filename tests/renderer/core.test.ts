@@ -45,3 +45,13 @@ it('should render `@class` rule',
     expect(render(parse(styles))).toEqual(expected);
   }
 );
+
+it('should render a top-level `@class` rule',
+  () =>
+  {
+    const styles = '@class foo{ color = blue\n }';
+    const expected = '.foo{color:blue}';
+
+    expect(render(parse(styles))).toEqual(expected);
+  }
+);

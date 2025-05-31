@@ -20,5 +20,10 @@
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": true,
   "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
   "typescript.format.placeOpenBraceOnNewLineForFunctions": true,
-  "typescript.suggestionActions.enabled": false
+  "typescript.suggestionActions.enabled": false,
+
+  "highlight.regexes":
+  {
+    
+  }
 }
