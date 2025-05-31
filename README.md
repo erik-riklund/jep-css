@@ -4,7 +4,7 @@ _Don't replace the engine, just give it a more elegant dashboard._
 
 > Please note that this project is in early development. 🚧
 
-**Just Enough Styling (JES)** is a plain-language abstraction that reimagines the way CSS is written. It’s not a replacement for CSS, but rather a more readable way to express it.
+**Just Enough Styling (JES)** is a plain-language abstraction that reimagines the way CSS is written. Its purpose is not to replace CSS, but to provide a more expressive and readable alternative.
 
 <img src=dashboard.png style="max-width:100%"><br>
 
