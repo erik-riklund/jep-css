@@ -37,9 +37,12 @@ export const renderCurrentBlock = (group: string, state: RenderState) =>
     state.result[group] = []; // initialize the output group.
   }
 
-  if (currentBlock.type === 'device')
+  if (currentBlock.type === 'device' || currentBlock.type === 'print')
   {
-    state.result[group].push(`@media screen and${ currentBlock.selectors[0] }{`);
+    state.result[group].push(
+      currentBlock.type === 'print' ? '@media print{' :
+        `@media screen and${ currentBlock.selectors[0] }{`
+    );
 
     if (currentBlock.declarations)
     {

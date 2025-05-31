@@ -10,6 +10,7 @@ export type Block = {
    */
   type?:
   | 'device'
+  | 'print'
   | 'theme';
 
   /**

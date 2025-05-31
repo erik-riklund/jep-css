@@ -1,5 +1,5 @@
 import { it, expect } from 'bun:test'
-import { parseWhenRule } from 'module:parser/selectors/when'
+import { parseWhenRule } from 'module:parser/rules/when'
 
 it('should parse a `@when` rule',
   () =>

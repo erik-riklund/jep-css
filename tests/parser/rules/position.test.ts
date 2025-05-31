@@ -1,5 +1,5 @@
 import { it, expect } from 'bun:test'
-import { parsePositionRule } from 'module:parser/selectors/position'
+import { parsePositionRule } from 'module:parser/rules/position'
 
 it('should parse a `@position` rule',
   () =>

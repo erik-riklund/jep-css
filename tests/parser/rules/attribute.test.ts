@@ -1,5 +1,5 @@
 import { it, expect } from 'bun:test'
-import { parseAttributeRule } from 'module:parser/selectors/attribute'
+import { parseAttributeRule } from 'module:parser/rules/attribute'
 
 it('should parse an attribute selector',
   () =>

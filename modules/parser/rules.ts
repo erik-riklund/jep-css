@@ -1,16 +1,17 @@
 
-import { handleDeviceSelector } from './selectors/device'
-import { handleThemeSelector } from './selectors/theme'
+import { handleDeviceSelector } from './rules/device'
+import { handlePrintRule } from './rules/print'
+import { handleThemeSelector } from './rules/theme'
 
-import { parseAdjacentRule } from './selectors/elements'
-import { parseAttributeRule } from './selectors/attribute'
-import { parseChildRule } from './selectors/elements'
-import { parseClassRule } from './selectors/class'
-import { parsePositionRule } from './selectors/position'
-import { parseSiblingRule } from './selectors/elements'
-import { parseStateRule } from './selectors/state'
-import { parseWhenRule } from './selectors/when'
-import { parseWithRule } from './selectors/with'
+import { parseAdjacentRule } from './rules/elements'
+import { parseAttributeRule } from './rules/attribute'
+import { parseChildRule } from './rules/elements'
+import { parseClassRule } from './rules/class'
+import { parsePositionRule } from './rules/position'
+import { parseSiblingRule } from './rules/elements'
+import { parseStateRule } from './rules/state'
+import { parseWhenRule } from './rules/when'
+import { parseWithRule } from './rules/with'
 
 /**
  * Centralized collection of selector parsers.
@@ -18,6 +19,7 @@ import { parseWithRule } from './selectors/with'
 export const selectorParsers =
 {
   handleDeviceSelector,
+  handlePrintRule,
   handleThemeSelector,
   
   parseAdjacentRule,

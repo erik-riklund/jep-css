@@ -101,7 +101,9 @@ const handleOpeningBrace = (state: ParserState) =>
       continue; // assumed to be a standard CSS selector.
     }
 
-    const rule = currentSelector.slice(0, currentSelector.indexOf(' '));
+    const rule = currentSelector.slice(0,
+      currentSelector.includes(' ') ? currentSelector.indexOf(' ') : undefined
+    );
 
     switch (rule)
     {
@@ -115,6 +117,10 @@ const handleOpeningBrace = (state: ParserState) =>
 
       case '@child':
         block.selectors[i] = selectorParsers.parseChildRule(currentSelector);
+        break;
+
+      case '@class':
+        block.selectors[i] = selectorParsers.parseClassRule(currentSelector);
         break;
 
       case '@device':
@@ -131,6 +137,10 @@ const handleOpeningBrace = (state: ParserState) =>
 
       case '@position':
         block.selectors[i] = selectorParsers.parsePositionRule(currentSelector);
+        break;
+
+      case '@print':
+        selectorParsers.handlePrintRule(state, block);
         break;
 
       case '@sibling':

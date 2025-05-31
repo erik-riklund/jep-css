@@ -1,5 +1,5 @@
 import { it, expect } from 'bun:test'
-import { parseWithRule } from 'module:parser/selectors/with'
+import { parseWithRule } from 'module:parser/rules/with'
 
 it('should parse a with selector targeting a child element',
   () =>

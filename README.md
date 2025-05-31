@@ -1,6 +1,6 @@
 > Please note that this project is in early development. 🚧
 
-**Poise** is a language that reimagines how stylesheets are written. It utilizes the power of plain language to express styling patterns, keeping the syntax simple and easy to read. As an abstraction, the language hides the underlying CSS syntax, both reducing the need for deep syntax knowledge and allowing focus to remain on the design.
+**Poise** is a language that reimagines how stylesheets are written. It utilizes the power of plain language to express styling patterns, keeping the syntax simple and easy to read. As an abstraction, the language hides the underlying CSS syntax, reducing the need for deep syntax knowledge and allowing focus to remain on the design.
 
 <img src=dashboard.png style="max-width:100%"><br>
 
@@ -59,6 +59,11 @@ form
 _Add a description._
 
 ```
+@print
+{
+  // @media print
+}
+
 @device tablet only
 {
   // @media screen and (min-width: 576px) and (max-width: 1023px)
@@ -77,11 +82,6 @@ _Add a description._
 @device tablet .. laptop
 {
   // @media screen and (min-width: 576px) and (max-width: 1439px)
-}
-
-@print
-{
-  // @media print
 }
 ```
 

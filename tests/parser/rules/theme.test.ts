@@ -1,5 +1,5 @@
 import { it, expect } from 'bun:test'
-import { parseThemeSelector } from 'module:parser/selectors/theme'
+import { parseThemeSelector } from 'module:parser/rules/theme'
 
 it('should parse a theme selector (light)',
   () =>

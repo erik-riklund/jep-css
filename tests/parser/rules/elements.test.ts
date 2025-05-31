@@ -1,6 +1,6 @@
 import { it, expect } from 'bun:test'
 
-import { parseElementRule } from 'module:parser/selectors/elements'
+import { parseElementRule } from 'module:parser/rules/elements'
 
 it('should parse an element selector',
   () =>

@@ -1,5 +1,5 @@
 import { it, expect } from 'bun:test'
-import { parseStateRule } from 'module:parser/selectors/state';
+import { parseStateRule } from 'module:parser/rules/state';
 
 it('should parse a state selector',
   () =>

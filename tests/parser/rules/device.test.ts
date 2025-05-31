@@ -1,5 +1,5 @@
 import { it, expect } from 'bun:test'
-import { parseDeviceSelector } from 'module:parser/selectors/device'
+import { parseDeviceSelector } from 'module:parser/rules/device'
 
 it('should parse a specific device selector',
   () =>
