@@ -5,6 +5,7 @@ import { handleThemeSelector } from './selectors/theme'
 import { parseAdjacentRule } from './selectors/elements'
 import { parseAttributeRule } from './selectors/attribute'
 import { parseChildRule } from './selectors/elements'
+import { parseClassRule } from './selectors/class'
 import { parsePositionRule } from './selectors/position'
 import { parseSiblingRule } from './selectors/elements'
 import { parseStateRule } from './selectors/state'
@@ -22,6 +23,7 @@ export const selectorParsers =
   parseAdjacentRule,
   parseAttributeRule,
   parseChildRule,
+  parseClassRule,
   parsePositionRule,
   parseSiblingRule,
   parseStateRule,
