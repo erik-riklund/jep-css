@@ -333,9 +333,9 @@ input
 {
   @attribute type is "checkbox"
   {
-    @when not valid and not disabled
+    @when not disabled and focused
     {
-      // `input:not(:valid):not(:disabled)`
+      // `input[type="checkbox"]:not(:disabled):focus`
     }
   }
 }
