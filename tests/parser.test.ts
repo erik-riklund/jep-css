@@ -2,6 +2,8 @@ import { it, expect } from 'bun:test'
 import { parse } from 'module:parser'
 
 import { MissingLineBreakAfterPropertyValueError } from 'errors'
+import { MultipleSelectorsForDeviceRangeError } from 'errors'
+import { MultipleSelectorsForThemeBlockError } from 'errors'
 import { NestedDeviceRangeError } from 'errors'
 import { PropertyDeclarationOutsideBlockError } from 'errors'
 import { UnexpectedCommaOutsideBlockError } from 'errors'
@@ -269,6 +271,30 @@ it('should parse pseudo-element selectors',
 );
 
 /**
+ * Tests focused on parsing `@` rules:
+ */
+
+it('should parse `@with` rules',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @with child class foo{ color = blue\n } }';
+
+    expect(parse(styles)).toEqual([
+      {
+        selectors: ['h1'],
+        declarations: [{ key: 'color', value: 'red' }],
+        children: [
+          {
+            selectors: ['&:has(>.foo)'],
+            declarations: [{ key: 'color', value: 'blue' }]
+          }
+        ]
+      }
+    ]);
+  }
+);
+
+/**
  * Tests focused on error reporting:
  */
 
@@ -333,5 +359,41 @@ it('should throw an error when an unknown device name is encountered',
     const styles = 'h1 { color = red\n @device unknown only{ color = blue\n } }';
 
     expect(() => parse(styles)).toThrow(UnknownDeviceError);
+  }
+);
+
+it('should throw an error on missing line breaks after property value assignments (#1)',
+  () =>
+  {
+    const styles = 'h1 { color = red @device mobile only{ color = blue\n } }';
+
+    expect(() => parse(styles)).toThrow(MissingLineBreakAfterPropertyValueError);
+  }
+);
+
+it('should throw an error on missing line breaks after property value assignments (#2)',
+  () =>
+  {
+    const styles = 'h1 { color = red\nborder= black test=foo }';
+    
+    expect(() => parse(styles)).toThrow(MissingLineBreakAfterPropertyValueError);
+  }
+);
+
+it('should throw an error on multiple selectors for a device range block',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @device tablet .., h2 { color = blue\n } }';
+
+    expect(() => parse(styles)).toThrow(MultipleSelectorsForDeviceRangeError);
+  }
+);
+
+it('should throw an error on multiple selectors for a theme block',
+  () =>
+  {
+    const styles = 'h1 { color = red\n @theme dark, h2 { color = blue\n } }';
+
+    expect(() => parse(styles)).toThrow(MultipleSelectorsForThemeBlockError);
   }
 );

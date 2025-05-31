@@ -36,6 +36,32 @@ export class MissingLineBreakAfterPropertyValueError extends LanguageError
 }
 
 /**
+ * An error thrown when multiple selectors are encountered for a device range block.
+ * 
+ * @param line The line number of the error.
+ * @param column The column number of the error.
+ */
+export class MultipleSelectorsForDeviceRangeError extends LanguageError
+{
+  constructor(line: number, column: number)
+  {
+    super('Multiple selectors for device range block', line, column);
+
+    this.name = 'MultipleSelectorsForDeviceRangeError';
+  }
+}
+
+export class MultipleSelectorsForThemeBlockError extends LanguageError
+{
+  constructor(line: number, column: number)
+  {
+    super('Multiple selectors for theme block', line, column);
+
+    this.name = 'MultipleSelectorsForThemeBlockError';
+  }
+}
+
+/**
  * An error thrown when a nested device range block is encountered.
  * 
  * @param line The line number of the error.

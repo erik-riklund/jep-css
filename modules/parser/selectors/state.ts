@@ -3,13 +3,11 @@ import type { Block } from 'types'
 /**
  * Responsible for handling state selectors.
  * 
- * @param block The block to handle.
+ * @param selector The state selector to handle.
  */
-export const handleStateSelector = (block: Block) =>
+export const handleStateSelector = (selector: string) =>
 {
-  block.type = 'state';
-
-  block.selectors = block.selectors.map(parseStateSelector);
+  return parseStateSelector(selector);
 }
 
 /**

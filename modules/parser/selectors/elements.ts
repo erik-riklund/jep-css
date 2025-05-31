@@ -1,39 +1,25 @@
-import type { Block } from 'types'
-
 /**
  * ?
  */
-export const handleChildSelector = (block: Block) =>
+export const handleChildSelector = (selector: string) =>
 {
-  block.type = 'child';
-
-  block.selectors = [...block.selectors.map(
-    selector => `&>${ parseElementSelector(selector) }`)
-  ];
+  return `&>${ parseElementSelector(selector) }`;
 };
 
 /**
  * ?
  */
-export const handleSiblingSelector = (block: Block) =>
+export const handleSiblingSelector = (selector: string) =>
 {
-  block.type = 'sibling';
-
-  block.selectors = [...block.selectors.map(
-    selector => `&~${ parseElementSelector(selector) }`)
-  ];
+  return `&~${ parseElementSelector(selector) }`;
 };
 
 /**
  * ?
  */
-export const handleAdjacentSelector = (block: Block) =>
+export const handleAdjacentSelector = (selector: string) =>
 {
-  block.type = 'adjacent';
-
-  block.selectors = [...block.selectors.map(
-    selector => `&+${ parseElementSelector(selector) }`)
-  ];
+  return `&+${ parseElementSelector(selector) }`;
 };
 
 /**

@@ -9,12 +9,7 @@ export type Block = {
    * Specifies the type of the block.
    */
   type?:
-  | 'adjacent'
-  | 'attribute'
-  | 'child'
   | 'device'
-  | 'sibling'
-  | 'state'
   | 'theme';
 
   /**

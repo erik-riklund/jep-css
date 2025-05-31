@@ -1,15 +1,11 @@
-import type { Block } from 'types'
-
 /**
  * Responsible for handling attribute selectors.
  * 
  * @param block The block to handle.
  */
-export const handleAttributeSelector = (block: Block) =>
+export const handleAttributeSelector = (selector: string) =>
 {
-  block.type = 'attribute';
-
-  block.selectors = [...block.selectors.map(parseAttributeSelector)];
+  return parseAttributeSelector(selector);
 }
 
 /**

@@ -2,6 +2,7 @@ import type { Block } from 'types'
 import type { ParserState } from 'types'
 
 import { NestedDeviceRangeError } from 'errors'
+import { MultipleSelectorsForDeviceRangeError } from 'errors'
 import { UnknownDeviceError } from 'errors'
 
 /**
@@ -27,23 +28,22 @@ export const handleDeviceSelector = (state: ParserState, block: Block) =>
     throw new NestedDeviceRangeError(state.line, state.column);
   }
 
+  if (block.selectors.length > 1)
+  {
+    throw new MultipleSelectorsForDeviceRangeError(state.line, state.column);
+  }
+
   block.type = 'device';
   state.isDeviceRange = true;
 
-  const parsedSelectors: string[] = [];
-  for (const selector of block.selectors)
+  try
   {
-    try
-    {
-      parsedSelectors.push(parseDeviceSelector(selector));
-    }
-    catch (error)
-    {
-      throw new UnknownDeviceError(error.message, state.line, state.column);
-    }
+    block.selectors = [parseDeviceSelector(block.selectors[0])];
   }
-
-  block.selectors = parsedSelectors;
+  catch (error)
+  {
+    throw new UnknownDeviceError(error.message, state.line, state.column);
+  }
 }
 
 /**

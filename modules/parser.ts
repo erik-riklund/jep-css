@@ -53,8 +53,7 @@ export const parse: Parser = (input) =>
       case ',': handleComma(state); break;
       case '\n': handleLineBreak(state); break;
 
-      // add the current character to the buffer:
-      default: state.buffer += character; break;
+      default: handleRest(state, character); break;
     }
 
     // update the line and column numbers:
@@ -89,18 +88,55 @@ const handleOpeningBrace = (state: ParserState) =>
     throw new UnexpectedOpeningBraceError(state.line, state.column);
   }
 
-  const block: Block = { selectors: selector.split(',').map(selector => selector.trim()) };
-  const rule = selector.slice(0, selector.indexOf(' '));
+  const block: Block = {
+    selectors: selector.split(',').map(selector => selector.trim())
+  };
 
-  switch (rule)
+  for (let i = 0; i < block.selectors.length; i++)
   {
-    case '@adjacent': selectorParsers.handleAdjacentSelector(block); break;
-    case '@attribute': selectorParsers.handleAttributeSelector(block); break;
-    case '@child': selectorParsers.handleChildSelector(block); break;
-    case '@device': selectorParsers.handleDeviceSelector(state, block); break;
-    case '@sibling': selectorParsers.handleSiblingSelector(block); break;
-    case '@state': selectorParsers.handleStateSelector(block); break;
-    case '@theme': selectorParsers.handleThemeSelector(state, block); break;
+    const currentSelector = block.selectors[i];
+
+    if (!currentSelector.startsWith('@'))
+    {
+      continue; // assumed to be a standard CSS selector.
+    }
+
+    const rule = currentSelector.slice(0, currentSelector.indexOf(' '));
+
+    switch (rule)
+    {
+      case '@adjacent':
+        block.selectors[i] = selectorParsers.handleAdjacentSelector(currentSelector);
+        break;
+
+      case '@attribute':
+        block.selectors[i] = selectorParsers.handleAttributeSelector(currentSelector);
+        break;
+
+      case '@child':
+        block.selectors[i] = selectorParsers.handleChildSelector(currentSelector);
+        break;
+
+      case '@device':
+        selectorParsers.handleDeviceSelector(state, block);
+        break;
+
+      case '@sibling':
+        block.selectors[i] = selectorParsers.handleSiblingSelector(currentSelector);
+        break;
+
+      case '@state':
+        block.selectors[i] = selectorParsers.handleStateSelector(currentSelector);
+        break;
+
+      case '@theme':
+        selectorParsers.handleThemeSelector(state, block);
+        break;
+
+      case '@with':
+        block.selectors[i] = selectorParsers.handleWithSelector(currentSelector);
+        break;
+    }
   }
 
   /**
@@ -152,7 +188,7 @@ const handleClosingBrace = (state: ParserState) =>
 }
 
 /**
- * ?
+ * Handles the opening bracket `[` in the input string.
  */
 const handleOpeningBracket = (state: ParserState) =>
 {
@@ -165,7 +201,7 @@ const handleOpeningBracket = (state: ParserState) =>
 }
 
 /**
- * ?
+ * Handles the closing bracket `]` in the input string.
  */
 const handleClosingBracket = (state: ParserState) =>
 {
@@ -191,6 +227,11 @@ const handleAssignment = (state: ParserState) =>
     return; // ignore the assignment operator in attribute selectors, e.g. `input[type="radio"]`.
   }
 
+  if (state.isDeclaration)
+  {
+    throw new MissingLineBreakAfterPropertyValueError(state.line, state.column);
+  }
+
   const currentBlock = state.stack[state.stack.length - 1];
 
   if (!currentBlock)
@@ -205,7 +246,7 @@ const handleAssignment = (state: ParserState) =>
 }
 
 /**
- * ?
+ * Handles the line break `\n` in the input string. 
  */
 const handleLineBreak = (state: ParserState) =>
 {
@@ -238,4 +279,22 @@ const handleComma = (state: ParserState) =>
   }
 
   state.buffer += ','; // add the comma to the buffer.
+}
+
+/**
+ * Handles any other character in the input string.
+ */
+const handleRest = (state: ParserState, character: string) =>
+{
+  if (state.isDeclaration)
+  {
+    if (character === '@')
+    {
+      // ... add more characters to test for the lack of line breaks.
+
+      throw new MissingLineBreakAfterPropertyValueError(state.line, state.column);
+    }
+  }
+
+  state.buffer += character;
 }

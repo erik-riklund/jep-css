@@ -1,6 +1,8 @@
 import type { Block } from 'types'
 import type { ParserState } from 'types'
 
+import { MultipleSelectorsForThemeBlockError } from 'errors'
+
 /**
  * Responsible for handling theme selectors.
  * 
@@ -12,6 +14,11 @@ import type { ParserState } from 'types'
  */
 export const handleThemeSelector = (state: ParserState, block: Block) =>
 {
+  if (block.selectors.length > 1)
+  {
+    throw new MultipleSelectorsForThemeBlockError(state.line, state.column);
+  }
+
   block.type = 'theme';
   block.selectors = [parseThemeSelector(block.selectors[0])];
 
