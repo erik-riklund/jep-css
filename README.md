@@ -1,20 +1,16 @@
-# 🎨 Just Enough Styling
-
-_Don't replace the engine, just give it a more elegant dashboard._
-
 > Please note that this project is in early development. 🚧
 
-**Just Enough Styling (JES)** is a plain-language abstraction that reimagines the way CSS is written. It utilizes the power of plain language to express styling patterns, keeping the syntax simple and easy to read. As an abstraction, the language shields you from the underlying syntax, allowing you to focus on the core of your design.
+**Poise** is a language that reimagines how stylesheets are written. It utilizes the power of plain language to express styling patterns, keeping the syntax simple and easy to read. As an abstraction, the language hides the underlying CSS syntax, both reducing the need for deep syntax knowledge and allowing focus to remain on the design.
 
 <img src=dashboard.png style="max-width:100%"><br>
 
-The language is designed to be flexible and incremental. Use its expressive constructs for common patterns, and fall back to standard CSS when needed. Whether you’re working on simple layouts or complex edge cases, JES fits into your workflow without getting in the way.
+The language is designed to be flexible and incremental. Use its expressive constructs for common patterns, and fall back to standard CSS selectors when needed. _Extend this later..._
 
 ---
 
-### Decluttered property declarations ✔️
+### Decluttered property declarations
 
-The syntax is clean and easy to read — no semicolons or colons. Properties are assigned with `=` and separated by line breaks. All standard CSS properties and values are supported, keeping the behavior familiar while improving readability.
+_Add a description._
 
 ```
 div
@@ -26,9 +22,9 @@ div
 
 ---
 
-### Nesting for enhanced readability ✔️
+### Nesting for enhanced readability
 
-Nesting, a familiar pattern from SCSS and similar preprocessors, improves readability by  grouping related selectors. It’s a clear, structured way to reflect hierarchy without repeating parent selectors.
+_Add a description._
 
 ```
 div
@@ -58,9 +54,9 @@ form
 
 ---
 
-### Simplified media queries with device ranges ✔️
+### Simplified media queries with device ranges
 
-The `@device` rule simplifies responsive design by replacing verbose media queries with clear, intent-driven syntax. Use readable keywords like `tablet` and `laptop` to target breakpoints directly — making your styles more concise and meaningful.
+_Add a description._
 
 ```
 @device tablet only
@@ -82,15 +78,20 @@ The `@device` rule simplifies responsive design by replacing verbose media queri
 {
   // @media screen and (min-width: 576px) and (max-width: 1439px)
 }
+
+@print
+{
+  // @media print
+}
 ```
 
 > ℹ️ The available device names are `mobile`, `tablet`, `laptop`, and `desktop`.
 
 ---
 
-### Easy access to light and dark themes ✔️
+### Easy access to light and dark themes
 
-The `@theme` rule ties directly to `prefers-color-scheme`, making it easy to define light and dark mode styles inline — right where they matter. No need to separate theme logic from your core styles.
+_Add a description._
 
 ```
 *
@@ -106,9 +107,9 @@ The `@theme` rule ties directly to `prefers-color-scheme`, making it easy to def
 
 ---
 
-### Class-based state management ✔️
+### Class-based state management
 
-The `@state` rule provides a clear, expressive way to apply styles based on class presence. It simplifies conditional styling and avoids the need for complex, manual selectors.
+_Add a description._
 
 ```
 *
@@ -139,9 +140,9 @@ The `@state` rule provides a clear, expressive way to apply styles based on clas
 
 ---
 
-### Element relationships ✔️
+### Element relationships
 
-The `@child`, `@sibling`, and `@adjacent` rules give you direct, readable control over element relationships. They map to standard CSS combinators, letting you express structure clearly without resorting to verbose selectors.
+_Add a description._
 
 ```
 *
@@ -170,9 +171,9 @@ The `@child`, `@sibling`, and `@adjacent` rules give you direct, readable contro
 
 ---
 
-### Attribute-based styling ✔️
+### Attribute-based styling
 
-The `@attribute` rule lets you style elements based on attributes. It can be used to target elements with specific attributes, attribute values, or the absence of an attribute.
+_Add a description._
 
 ```
 *
@@ -201,9 +202,9 @@ The `@attribute` rule lets you style elements based on attributes. It can be use
 
 ---
 
-### Context-based styling ✔️
+### Context-based styling
 
-The `@with` rule lets you style elements based on nearby or nested content — children, siblings, or adjacent elements. It expresses structural conditions in a clean, readable way, without relying on verbose selectors.
+_Add a description._
 
 ```
 *
@@ -252,9 +253,9 @@ The `@with` rule lets you style elements based on nearby or nested content — c
 
 ---
 
-### Dynamic states and element conditions ✔️
+### Dynamic states and element conditions
 
-The `@when` rule makes working with pseudo-classes like `:hover` or `:disabled` feel natural and readable. It supports negation and mirrors the logic of `@state`, but targets dynamic states and element conditions instead of class-based logic.
+_Add a description._
 
 ```
 *
@@ -326,38 +327,23 @@ The `@when` rule makes working with pseudo-classes like `:hover` or `:disabled` 
 }
 ```
 
-?
-
-```
-input
-{
-  @attribute type is "checkbox"
-  {
-    @when not disabled and focused
-    {
-      // `input[type="checkbox"]:not(:disabled):focus`
-    }
-  }
-}
-```
-
 ---
 
-### Selecting elements based on their position ✔️
+### Selecting elements based on their position
 
-?
+_Add a description._
 
 ```
 *
 {
   @first
   {
-    // `*:first-of-type`
+    // `*:nth-of-type(1)`
   }
 
   @last
   {
-    // `*:last-of-type`
+    // `*:nth-last-of-type(1)`
   }
 
   @position 2
