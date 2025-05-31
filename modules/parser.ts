@@ -121,6 +121,18 @@ const handleOpeningBrace = (state: ParserState) =>
         selectorParsers.handleDeviceSelector(state, block);
         break;
 
+      case '@first':
+        block.selectors[i] = selectorParsers.handlePositionSelector('@position 1');
+        break;
+
+      case '@last':
+        block.selectors[i] = selectorParsers.handlePositionSelector('@position -1');
+        break;
+
+      case '@position':
+        block.selectors[i] = selectorParsers.handlePositionSelector(currentSelector);
+        break;
+
       case '@sibling':
         block.selectors[i] = selectorParsers.handleSiblingSelector(currentSelector);
         break;

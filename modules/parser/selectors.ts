@@ -2,6 +2,7 @@ import { handleAdjacentSelector } from './selectors/elements'
 import { handleAttributeSelector } from './selectors/attribute'
 import { handleChildSelector } from './selectors/elements'
 import { handleDeviceSelector } from './selectors/device'
+import { handlePositionSelector } from './selectors/position'
 import { handleSiblingSelector } from './selectors/elements'
 import { handleStateSelector } from './selectors/state'
 import { handleThemeSelector } from './selectors/theme'
@@ -17,6 +18,7 @@ export const selectorParsers =
   handleAttributeSelector,
   handleChildSelector,
   handleDeviceSelector,
+  handlePositionSelector,
   handleSiblingSelector,
   handleStateSelector,
   handleThemeSelector,

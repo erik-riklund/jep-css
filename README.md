@@ -252,7 +252,7 @@ The `@with` rule lets you style elements based on nearby or nested content — c
 
 ---
 
-### Dynamic states and element conditions 🛠️
+### Dynamic states and element conditions ✔️
 
 The `@when` rule makes working with pseudo-classes like `:hover` or `:disabled` feel natural and readable. It supports negation and mirrors the logic of `@state`, but targets dynamic states and element conditions instead of class-based logic.
 
@@ -314,7 +314,7 @@ The `@when` rule makes working with pseudo-classes like `:hover` or `:disabled` 
     // `*:required`
   }
 
-  @when valid input
+  @when valid
   {
     // `*:valid`
   }
@@ -343,7 +343,7 @@ input
 
 ---
 
-### Pseudo-element selectors 🧠
+### Selecting elements based on their position ✔️
 
 ?
 
