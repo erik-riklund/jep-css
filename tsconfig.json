@@ -9,6 +9,14 @@
         "./modules/*/index.ts",
         "./modules/*"
       ],
+      "preprocess:*": [
+        "./plugins/preprocessors/*/index.ts",
+        "./plugins/preprocessors/*"
+      ],
+      "postprocess:*": [
+        "./plugins/postprocessors/*/index.ts",
+        "./plugins/postprocessors/*"
+      ],
       "types": [ "./types.d.ts" ],
       "types/*": [ "./types/*" ]
     },
