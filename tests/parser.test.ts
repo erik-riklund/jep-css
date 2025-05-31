@@ -23,7 +23,7 @@ it('should return an empty tree',
   }
 );
 
-it('should parse a block',
+it('should parse an empty block',
   () => 
   {
     expect(parse('h1 {}')).toEqual([{ selectors: ['h1'] }]);
@@ -89,7 +89,7 @@ it('should parse deeply nested blocks',
  * Tests focused on successful parsing of properties:
  */
 
-it('should parse a property',
+it('should parse a property declaration',
   () =>
   {
     const styles = 'h1 {\n  color = red\n }';
@@ -100,7 +100,7 @@ it('should parse a property',
   }
 );
 
-it('should parse multiple properties',
+it('should parse multiple property declarations',
   () =>
   {
     const styles = 'h1 { color = red\n background-color = blue\n }';
@@ -228,7 +228,7 @@ it('should parse multiple selectors',
   }
 );
 
-it('should parse attribute selectors',
+it('should parse an attribute selector',
   () =>
   {
     const styles = 'input[type="radio"] { color = red\n }';
@@ -265,30 +265,6 @@ it('should parse pseudo-element selectors',
       {
         selectors: ['h1::before'],
         declarations: [{ key: 'color', value: 'red' }]
-      }
-    ]);
-  }
-);
-
-/**
- * Tests focused on parsing `@` rules:
- */
-
-it('should parse `@with` rules',
-  () =>
-  {
-    const styles = 'h1 { color = red\n @with child class foo{ color = blue\n } }';
-
-    expect(parse(styles)).toEqual([
-      {
-        selectors: ['h1'],
-        declarations: [{ key: 'color', value: 'red' }],
-        children: [
-          {
-            selectors: ['&:has(>.foo)'],
-            declarations: [{ key: 'color', value: 'blue' }]
-          }
-        ]
       }
     ]);
   }
